@@ -18,7 +18,7 @@ public class Main {
         // while we have lexical atoms:
         while ((input = analyzer.getInput()) != null) {
             Token nextToken = analyzer.GetNextLexicalAtom(input);
-            out.print(nextToken.getValue() + "!");
+            out.print(nextToken.getType().name() + " " + nextToken.getValue() + "!");
         }
         out.close();
 //        BufferedReader reader = new BufferedReader(new FileReader(args[0]));

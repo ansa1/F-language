@@ -74,7 +74,7 @@ public class FLexer {
         input = StringUtils.strip(input, " \t");
 
         StringBuilder token = new StringBuilder();
-        Token newToken = new Token();
+        Token newToken = new Token(Type.EOF, "");
 
         // check all element
         for (int i = 0; i < input.length(); i++) {
@@ -230,10 +230,12 @@ public class FLexer {
     private Token Parse(String input) {
 
         StringBuilder str = new StringBuilder();
-        Token token = new Token();
+        Token token = new Token(Type.EOF, "");
 
         // if it is an integer:
+        System.out.println("here + " + input);
         if (Utils.isInteger(input)) {
+            System.out.println("done + " + input);
             // it is numerical constant
             str.append("[Numerical constant -> \"" + input + "\"] ");
             token.setType(Type.NUMERICAL_CONSTANT);

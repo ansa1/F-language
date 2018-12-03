@@ -19,4 +19,9 @@ public class Token {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public Token(Type type, String value) {
+        this.type = type;
+        this.value = value;
+    }
 }
