@@ -1,4 +1,4 @@
-package lexer;
+package lexical;
 
 public class Utils {
     // constant string to remove BOM from the file

@@ -1,4 +1,4 @@
-package lexer;
+package lexical;
 
 import model.Token;
 import model.Type;
@@ -102,7 +102,6 @@ public class FLexer {
         try {
             // check all element
             for (int i = 0; i < input.length(); i++) {
-                System.out.println(input + " " + i);
 
                 // if it is delimiter:
                 if (CheckDelimiter(Character.toString(input.charAt(i)))) {
@@ -306,8 +305,6 @@ public class FLexer {
         }
         catch (Exception e) {
             e.printStackTrace();
-//            System.out.println(e.getStackTrace());
-            System.out.println(input);
         }
             setInput(null);
             return newToken;

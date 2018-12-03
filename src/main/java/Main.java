@@ -3,29 +3,33 @@ import model.Type;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import lexer.FLexer;
-import java.util.Scanner;
+import lexical.FLexer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        File file = new File(args[0]);
-        PrintWriter out = new PrintWriter(new File("out.txt"));
 
-        // read all file
-        String input = FileUtils.readFileToString(file);
-
+    public static String parseLexical(String input) throws FileNotFoundException {
         FLexer analyzer = new FLexer(input);
 
-        // while we have lexical atoms:
+        StringBuilder output = new StringBuilder();
         while ((input = analyzer.getInput()) != null) {
             Token nextToken = analyzer.GetNextLexicalAtom(input);
             if (nextToken.getType() != Type.INPUT_LINE_SEPARATOR) {
-                out.print(nextToken.getType().name() + " " + nextToken.getValue() + "\n");
+                output.append(nextToken.getType().name() + " " + nextToken.getValue() + "\n");
             }
             else {
-                out.print(nextToken.getValue());
-            };
+                output.append(nextToken.getValue());
+            }
         }
-        out.close();
+        return output.toString();
+    }
+
+    public static void main(String[] args) throws IOException {
+        File file = new File(args[0]);
+
+        // read all file
+        String input = FileUtils.readFileToString(file);
+        System.out.println(parseLexical(input));
+        // while we have lexical atoms:
+
     }
 }
