@@ -1,31 +1,22 @@
-import model.Token;
-import model.Type;
-import org.apache.commons.io.FileUtils;
-
-import java.io.*;
-import lexer.FLexer;
-import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        File file = new File(args[0]);
-        PrintWriter out = new PrintWriter(new File("out.txt"));
-
-        // read all file
-        String input = FileUtils.readFileToString(file);
-
-        FLexer analyzer = new FLexer(input);
-
-        // while we have lexical atoms:
-        while ((input = analyzer.getInput()) != null) {
-            Token nextToken = analyzer.GetNextLexicalAtom(input);
-            if (nextToken.getType() != Type.INPUT_LINE_SEPARATOR) {
-                out.print(nextToken.getType().name() + " " + nextToken.getValue() + "\n");
+    public static void main(String[] args) throws Exception {
+        // Try to find a tree, which can describe input
+        try {
+            CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
+            cSyntaxAnalyzer.analyze("../in.txt");
+            cSyntaxAnalyzer.serializeTree("../out.txt");
+        } catch (Exception err) {
+            // Else there are errors, which program writes to console
+            System.out.println("An error occured while performing syntax analysis. Please see log.txt");
+            try (PrintWriter out = new PrintWriter("../log.txt")) {
+                out.println(err);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-            else {
-                out.print(nextToken.getValue());
-            };
         }
-        out.close();
+
     }
 }
