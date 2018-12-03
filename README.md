@@ -40,7 +40,7 @@ In order to run only the implemented JUnit tests you can simply use:
 ## For developers 
 
 In order to generate syntax analyzer via ANTLR you need to:
-
+0. Download maven and add all necessary variables to PATH
 1. Describe the language grammar in the appropriate format in .g4 file
 2. Install ANLTR plugin in Intellij IDEA 
 3. Right click on .g4 file and choose ```generate ANLTR Recognizer```
