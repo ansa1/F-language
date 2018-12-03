@@ -11,6 +11,11 @@ public class FLexer {
     private String input = "";
     private String inputLineSeparator = "";
 
+    private final String INTEGER_REGEX = "[0-9]+";
+    private final String COMPLEX_REGEX = "([0-9]+\\.[0-9]+|[0-9]+)i([0-9]+\\.[0-9]+|[0-9]+)";
+    private final String REAL_REGEX = "[0-9]+\\.[0-9]+";
+    private final String RATIONAL_REGEX = "[0-9]+\\\\[0-9]+";
+
     private void setInputLineSeparator(String input) {
         inputLineSeparator = Utils.getInputLineSeparator(input);
     }
@@ -63,7 +68,7 @@ public class FLexer {
 
     // keyword class
     private final static String[] keywords = {"boolean", "integer", "real", "rational", "complex", "string",
-    "true", "false", "is", "if", "else", "end", "then", "return", "do", "for", "in", "loop", "=>", "while", "break"};
+            "true", "false", "is", "if", "else", "end", "then", "return", "do", "for", "in", "loop", "=>", "while", "break"};
 
     // check that this 'str' is keyword
     private boolean CheckKeyword(String str) {
@@ -124,7 +129,10 @@ public class FLexer {
 
                 }
                 // check if it is an operator
-                else if (CheckOperator(Character.toString(input.charAt(i)))) {
+                else if (CheckOperator(Character.toString(input.charAt(i))) &&
+                        !((input.substring(0, i).matches(INTEGER_REGEX) ||
+                                input.substring(0, i).matches(COMPLEX_REGEX)) &&
+                                input.charAt(i) == '.')) {
                     if (i + 1 < input.length() && (CheckOperator(input.substring(i, i + 2))))
                         // 3 symbol operators
                         if (i + 2 < input.length() && CheckOperator(input.substring(i, i + 3))) {
@@ -216,100 +224,47 @@ public class FLexer {
                     return newToken;
                 } // if it is delimiter or operator:
                 else if (Character.toString(input.charAt(i + 1)).equals(" ") ||
-                        CheckDelimiter(Character.toString(input.charAt(i + 1)))
-                        || CheckOperator(Character.toString(input.charAt(i + 1)))
-                        // Breaks check of integer, parse them digit by digit
-//                        || checkDouble(input.charAt(i) + "")
-                        ) {
-
-                    // try to find numerical constant using 'i'
-                    if (input.contains("i")) {
-                        int j = 1;
-                        // find left bound
-                        while (j < input.length() && checkDouble(input.substring(0, j)) && input.charAt(j) != 'i')
-                            j++;
-
-                        if (input.charAt(j) == 'i') {
-                            // find right bound
-                            int pos = j + 1;
-                            j = pos + 1;
-                            while (j < input.length() && checkDouble(input.substring(pos, j)))
-                                j++;
-                            if (j != pos + 1) {
-                                newToken.setValue(input.substring(0, j));
-                                newToken.setType(Type.COMPLEX_LITERAL);
-                                input = input.substring(j);
-
-                                setInput(input);
-                                return newToken;
-                            }
-                        }
-                    }
-                    // try to find numerical constant using '\'
-                    if (input.contains("\\")) {
-                        int j = 1;
-                        // find left bound
-                        while (j < input.length() && checkInteger(input.substring(0, j)) && input.charAt(j) != '\\')
-                            j++;
-
-                        if (input.charAt(j) == '\\') {
-                            // find right bound
-                            int pos = j + 1;
-                            j = pos + 1;
-                            while (j < input.length() && checkInteger(input.substring(pos, j)))
-                                j++;
-                            if (j != pos + 1) {
-                                newToken.setValue(input.substring(0, j));
-                                newToken.setType(Type.RATIONAL_LITERAL);
-                                input = input.substring(j);
-
-                                setInput(input);
-                                return newToken;
-                            }
-                        }
-                    }
-                    // default(check floating number)
-                    if (Parse(input.substring(0, i + 1)).getType().name()
-                            .equals(Type.INTEGER_LITERAL.name())
-                            && input.charAt(i + 1) == '.') {
-                        int j = i + 2;
-
-                        // find right bound
-                        while (!(Character.toString(input.charAt(j)).equals(" ")) &&
-                                !CheckDelimiter(Character.toString(input.charAt(j))) &&
-                                !CheckOperator(Character.toString(input.charAt(j))))
-                            j++;
-
-                        // test that this input substring is correct integer
-
-                        if (Utils.isInteger(input.substring(i + 2, j))) {
-
-                            newToken.setValue(input.substring(0, j));
-                            // TODO: end all cases
-                            // here we found real number as numerical constant
-                            newToken.setType(Type.REAL_LITERAL);
-                            input = input.substring(j);
-
-                            setInput(input);
-                            return newToken;
-                        }
-                    }
+                        CheckDelimiter(Character.toString(input.charAt(i + 1))) ||
+                        (CheckOperator(Character.toString(input.charAt(i + 1))) &&
+                                !((input.substring(0, i + 1).matches(INTEGER_REGEX) ||
+                                        input.substring(0, i + 1).matches(COMPLEX_REGEX)) &&
+                                        input.charAt(i + 1) == '.'))) {
 
                     token.append(input.substring(0, i + 1));
                     input = input.substring(i + 1);
 
                     setInput(input);
+
+                    if (token.toString().matches(COMPLEX_REGEX)) {
+                        newToken.setType(Type.COMPLEX_LITERAL);
+                        newToken.setValue(token.toString());
+                        return newToken;
+                    }
+                    if (token.toString().matches(REAL_REGEX)) {
+                        newToken.setType(Type.REAL_LITERAL);
+                        newToken.setValue(token.toString());
+                        return newToken;
+                    }
+                    if (token.toString().matches(RATIONAL_REGEX)) {
+                        newToken.setType(Type.RATIONAL_LITERAL);
+                        newToken.setValue(token.toString());
+                        return newToken;
+                    }
+                    if (token.toString().matches(INTEGER_REGEX)) {
+                        newToken.setType(Type.INTEGER_LITERAL);
+                        newToken.setValue(token.toString());
+                        return newToken;
+                    }
                     return Parse(token.toString());
                 }
 
             }
             // of there is no token -> return empty token
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-            setInput(null);
-            return newToken;
+        setInput(null);
+        return newToken;
 
     }
 
@@ -317,15 +272,6 @@ public class FLexer {
 
         StringBuilder str = new StringBuilder();
         Token token = new Token(Type.EOF, "");
-
-        // if it is an integer:
-        if (Utils.isInteger(stringToken)) {
-            // it is numerical constant
-            str.append("[Numerical constant -> \"" + stringToken + "\"] ");
-            token.setType(Type.INTEGER_LITERAL);
-            token.setValue(stringToken);
-            return token;
-        }
 
         // new line
         if (stringToken.equals(inputLineSeparator)) {

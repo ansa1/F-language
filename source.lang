@@ -3,5 +3,8 @@ k is 34
 a is 3i4
 b is 3.4i4.5
 c is 3\4
+c is 3.4
 d is 3.4i5
 e is 3i4.5
+string.find()
+string.sub123(123).matches()

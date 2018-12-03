@@ -14,7 +14,7 @@ public class Main {
         while ((input = analyzer.getInput()) != null) {
             Token nextToken = analyzer.GetNextLexicalAtom(input);
             if (nextToken.getType() != Type.INPUT_LINE_SEPARATOR) {
-                output.append(nextToken.getType().name() + " " + nextToken.getValue() + "\n");
+                output.append(nextToken.getType().name() + " " + nextToken.getValue() + "!" + "\n");
             }
             else {
                 output.append(nextToken.getValue());
