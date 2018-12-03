@@ -7,3 +7,21 @@ a=3
 is==123
 a<3
 a=3
+a.3
+a+3
+a-3
+a is 1\2 // a is of type rational
+b is num(a) // b is of type integer, and equals to 1
+c is 1.2i3.4 // c is of type complex
+d is im(c) // d is of type real, and equals to 3.4
+e is re(c)
+a is 123
+b is 45.6
+max is func(p1:integer, p2:integer) => if p1>=p2 then p1
+else p2 end
+min is func(p1:integer, p2:integer) => if p1<=p2 then p1
+else p2 end
+main1 is func() do print "max = ",max(a,round(b)),"\n" end
+main2 is func() do print "min = ",max(a,round(b)),"\n" end
+a: integer is 777
+b: string is "This is a string\n"
