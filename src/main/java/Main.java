@@ -7,7 +7,7 @@ import lexical.FLexer;
 
 public class Main {
 
-    public static String parseLexical(String input) throws FileNotFoundException {
+    public static String parseLexical(String input) {
         FLexer analyzer = new FLexer(input);
 
         StringBuilder output = new StringBuilder();

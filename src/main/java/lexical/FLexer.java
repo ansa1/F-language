@@ -194,7 +194,7 @@ public class FLexer {
                         j++;
 
                     token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
-                    newToken.setType(Type.LITERAL_CONSTANT);
+                    newToken.setType(Type.STRING_LITERAL);
                     newToken.setValue(input.substring(i, j + 1));
                     input = input.substring(0, i) + input.substring(j + 1);
 
@@ -208,7 +208,7 @@ public class FLexer {
                     while (input.charAt(j) != '"')
                         j++;
                     token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
-                    newToken.setType(Type.LITERAL_CONSTANT);
+                    newToken.setType(Type.STRING_LITERAL);
                     newToken.setValue(input.substring(i, j + 1));
                     input = input.substring(0, i) + input.substring(j + 1);
 
@@ -217,8 +217,10 @@ public class FLexer {
                 } // if it is delimiter or operator:
                 else if (Character.toString(input.charAt(i + 1)).equals(" ") ||
                         CheckDelimiter(Character.toString(input.charAt(i + 1)))
-                        || CheckOperator(Character.toString(input.charAt(i + 1))) ||
-                        checkDouble(input.charAt(i) + "")) {
+                        || CheckOperator(Character.toString(input.charAt(i + 1)))
+                        // Breaks check of integer, parse them digit by digit
+//                        || checkDouble(input.charAt(i) + "")
+                        ) {
 
                     // try to find numerical constant using 'i'
                     if (input.contains("i")) {
@@ -235,7 +237,7 @@ public class FLexer {
                                 j++;
                             if (j != pos + 1) {
                                 newToken.setValue(input.substring(0, j));
-                                newToken.setType(Type.NUMERICAL_CONSTANT);
+                                newToken.setType(Type.COMPLEX_LITERAL);
                                 input = input.substring(j);
 
                                 setInput(input);
@@ -258,7 +260,7 @@ public class FLexer {
                                 j++;
                             if (j != pos + 1) {
                                 newToken.setValue(input.substring(0, j));
-                                newToken.setType(Type.NUMERICAL_CONSTANT);
+                                newToken.setType(Type.RATIONAL_LITERAL);
                                 input = input.substring(j);
 
                                 setInput(input);
@@ -268,7 +270,7 @@ public class FLexer {
                     }
                     // default(check floating number)
                     if (Parse(input.substring(0, i + 1)).getType().name()
-                            .equals(Type.NUMERICAL_CONSTANT.name())
+                            .equals(Type.INTEGER_LITERAL.name())
                             && input.charAt(i + 1) == '.') {
                         int j = i + 2;
 
@@ -285,7 +287,7 @@ public class FLexer {
                             newToken.setValue(input.substring(0, j));
                             // TODO: end all cases
                             // here we found real number as numerical constant
-                            newToken.setType(Type.NUMERICAL_CONSTANT);
+                            newToken.setType(Type.REAL_LITERAL);
                             input = input.substring(j);
 
                             setInput(input);
@@ -320,7 +322,7 @@ public class FLexer {
         if (Utils.isInteger(stringToken)) {
             // it is numerical constant
             str.append("[Numerical constant -> \"" + stringToken + "\"] ");
-            token.setType(Type.NUMERICAL_CONSTANT);
+            token.setType(Type.INTEGER_LITERAL);
             token.setValue(stringToken);
             return token;
         }

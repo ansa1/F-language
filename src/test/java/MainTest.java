@@ -16,25 +16,25 @@ public class MainTest {
         try {
             String expected = "IDENTIFIER a\n" +
                     "KEYWORD is\n" +
-                    "NUMERICAL_CONSTANT 3i4\n" +
+                    "INTEGER_LITERAL 3i4\n" +
                     "b\n" +
                     "KEYWORD is\n" +
-                    "NUMERICAL_CONSTANT 3.4i4.5\n" +
+                    "INTEGER_LITERAL 3.4i4.5\n" +
                     "c\n" +
                     "KEYWORD is\n" +
-                    "NUMERICAL_CONSTANT 3\\4\n" +
+                    "INTEGER_LITERAL 3\\4\n" +
                     "\n" +
                     "IDENTIFIER d\n" +
                     "KEYWORD is\n" +
-                    "NUMERICAL_CONSTANT 3.4i5\n" +
+                    "INTEGER_LITERAL 3.4i5\n" +
                     "e\n" +
                     "KEYWORD is\n" +
-                    "NUMERICAL_CONSTANT 3i4.5\n" +
+                    "INTEGER_LITERAL 3i4.5\n" +
                     "\n" +
                     "EOF \n";
             String actual = Main.parseLexical(input);
             assertEquals(expected, actual);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
