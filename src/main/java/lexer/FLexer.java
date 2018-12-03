@@ -43,7 +43,10 @@ public class FLexer {
     }
 
     // operator class
-    private final static String[] operators = {"+", "-", "*", "/", "<", ">", "<=", ">=", "=", "/=", "&", "|", "^",};
+    private final static String[] operators = {".", "+", "-", "*", "/", "<", ">", "<=", ">=", "=", "/=", "&", "|", "^", "(", ")"};
+
+    // numerical_constant
+    private final static String[] numeric_delimiter = {".", "\\", "i"};
 
     // check that this 'str' is operator
     private boolean CheckOperator(String str) {
@@ -67,6 +70,26 @@ public class FLexer {
         return Arrays.asList(keywords).contains(str);
     }
 
+    private boolean checkDouble(String str) {
+        // TODO: rewrite to regexp(WAR: 1.3f)
+        try {
+            double d = Double.parseDouble(str);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean checkInteger(String str) {
+        // TODO: rewrite to regexp(WAR:2L
+        try {
+            double d = Integer.parseInt(str);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     // this method finds next lexical atom
     public Token GetNextLexicalAtom(String input) {
 
@@ -76,208 +99,270 @@ public class FLexer {
         StringBuilder token = new StringBuilder();
         Token newToken = new Token(Type.EOF, "");
 
-        // check all element
-        for (int i = 0; i < input.length(); i++) {
+        try {
+            // check all element
+            for (int i = 0; i < input.length(); i++) {
+                System.out.println(input + " " + i);
 
-            // if it is delimiter:
-            if (CheckDelimiter(Character.toString(input.charAt(i)))) {
-                // two symbols delimiter
-                if (i + 1 < input.length() && CheckDelimiter(StringUtils.substring(input, i, i + 2))) {
-                    token.append(input.substring(i, i + 2));
-                    input = input.substring(0, i) + input.substring(i + 2);
-
-                    setInput(input);
-                    return Parse(token.toString());
-                }
-                // one symbol delimiter
-                else {
-                    token.append(Character.toString(input.charAt(i)));
-                    input = input = input.substring(0, i) + input.substring(i + 1);
-
-                    setInput(input);
-                    return Parse(token.toString());
-                }
-
-            }
-            // check if it is an operator
-            else if (CheckOperator(Character.toString(input.charAt(i)))) {
-                if (i + 1 < input.length() && (CheckOperator(input.substring(i, i + 2))))
-                    // 3 symbol operators
-                    if (i + 2 < input.length() && CheckOperator(input.substring(i, i + 3))) {
-                        token.append(input.substring(i, i + 3));
-                        input = input.substring(0, i) + input.substring(i + 3);
-
-                        setInput(input);
-                        return Parse(token.toString());
-                    }
-                    // 2 symbol operators
-                    else {
+                // if it is delimiter:
+                if (CheckDelimiter(Character.toString(input.charAt(i)))) {
+                    // two symbols delimiter
+                    if (i + 1 < input.length() && CheckDelimiter(StringUtils.substring(input, i, i + 2))) {
                         token.append(input.substring(i, i + 2));
                         input = input.substring(0, i) + input.substring(i + 2);
 
                         setInput(input);
                         return Parse(token.toString());
                     }
-                    // if we cannot gather 2 or 3 symbol operators -> check comments
-                else if (CheckComments(input.substring(i, i + 2))) {
-                    // one line comments
-                    if (input.substring(i, i + 2).equals("//")) {
-                        do {
-                            i++;
-                        }
-                        while (i < input.length() && input.charAt(i) != '\n');
-                        if (i >= input.length()) {
-                            setInput(null);
-                            return newToken;
-                        }
-                        input = input.substring(i + 1);
-                        input = StringUtils.strip(input, " \t\r\n");
-                        i = -1;
-                    }
-                    // otherwise multiline comments
+                    // one symbol delimiter
                     else {
-                        // find last element and ignore all
-                        do {
-                            i++;
-                        } while (input.substring(i, i + 2).equals("*/") == false);
-                        input = input.substring(i + 2);
-                        input = StringUtils.strip(input, " \t\r\n");
-                        i = -1;
-                    }
-
-                } else {
-
-                    // check negative number
-                    if (input.charAt(i) == '-') {
-                        if (Utils.isInteger(Character.toString(input.charAt(i + 1)))) {
-                            continue;
-                        }
-                    }
-
-                    // otherwise this is 1(one) symbol operators
-                    token.append(input.charAt(i));
-                    input = input.substring(0, i) + input.substring(i + 1);
-
-                    setInput(input);
-                    return Parse(token.toString());
-                }
-            } // if current symbol is ''' ->
-            else if (input.charAt(i) == '\'') {
-                int j = i + 1;
-                if (input.charAt(j) == '\\')
-                    j += 2;
-                else
-                    j++;
-
-                token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
-                newToken.setType(Type.LITERAL_CONSTANT);
-                newToken.setValue(input.substring(i, j + 1));
-                input = input.substring(0, i) + input.substring(j + 1);
-
-                setInput(input);
-
-                return newToken;
-            }
-            // other literal constant
-            else if (input.charAt(i) == '"') {
-                int j = i + 1;
-                while (input.charAt(j) != '"')
-                    j++;
-                token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
-                newToken.setType(Type.LITERAL_CONSTANT);
-                newToken.setValue(input.substring(i, j + 1));
-                input = input.substring(0, i) + input.substring(j + 1);
-
-                setInput(input);
-                return newToken;
-            } // if it is delimiter or operator:
-            else if (Character.toString(input.charAt(i + 1)).equals(" ") ||
-                    CheckDelimiter(Character.toString(input.charAt(i + 1)))
-                    || CheckOperator(Character.toString(input.charAt(i + 1)))) {
-                // try to find numerical constant
-                if (Parse(input.substring(0, i + 1)).getValue().contains("Numerical constant") && input.charAt(i + 1) == '.') {
-                    int j = i + 2;
-
-                    // find right bound
-                    while (!(Character.toString(input.charAt(j)).equals(" ")) &&
-                            !CheckDelimiter(Character.toString(input.charAt(j))) &&
-                            !CheckOperator(Character.toString(input.charAt(j))))
-                        j++;
-
-                    // test that this input substring is correct integer
-                    if (Utils.isInteger(input.substring(i + 2, j))) {
-                        token.append("[Numerical constant -> \"").append(input.substring(0, j)).append("\"] ");
-                        input = input.substring(j);
+                        token.append(Character.toString(input.charAt(i)));
+                        input = input.substring(0, i) + input.substring(i + 1);
 
                         setInput(input);
                         return Parse(token.toString());
                     }
+
                 }
-                token.append(input.substring(0, i + 1));
-                input = input.substring(i + 1);
+                // check if it is an operator
+                else if (CheckOperator(Character.toString(input.charAt(i)))) {
+                    if (i + 1 < input.length() && (CheckOperator(input.substring(i, i + 2))))
+                        // 3 symbol operators
+                        if (i + 2 < input.length() && CheckOperator(input.substring(i, i + 3))) {
+                            token.append(input.substring(i, i + 3));
+                            input = input.substring(0, i) + input.substring(i + 3);
 
-                setInput(input);
-                return Parse(input);
+                            setInput(input);
+                            return Parse(token.toString());
+                        }
+                        // 2 symbol operators
+                        else {
+                            token.append(input.substring(i, i + 2));
+                            input = input.substring(0, i) + input.substring(i + 2);
+
+                            setInput(input);
+                            return Parse(token.toString());
+                        }
+                        // if we cannot gather 2 or 3 symbol operators -> check comments
+                    else if (CheckComments(input.substring(i, i + 2))) {
+                        // one line comments
+                        if (input.substring(i, i + 2).equals("//")) {
+                            do {
+                                i++;
+                            }
+                            while (i < input.length() && input.charAt(i) != '\n');
+                            if (i >= input.length()) {
+                                setInput(null);
+                                return newToken;
+                            }
+                            input = input.substring(i + 1);
+                            input = StringUtils.strip(input, " \t\r\n");
+                            i = -1;
+                        }
+                        // otherwise multiline comments
+                        else {
+                            // find last element and ignore all
+                            do {
+                                i++;
+                            } while (input.substring(i, i + 2).equals("*/") == false);
+                            input = input.substring(i + 2);
+                            input = StringUtils.strip(input, " \t\r\n");
+                            i = -1;
+                        }
+
+                    } else {
+
+                        // check negative number
+                        if (input.charAt(i) == '-') {
+                            if (Utils.isInteger(Character.toString(input.charAt(i + 1)))) {
+                                continue;
+                            }
+                        }
+
+                        // otherwise this is 1(one) symbol operators
+                        token.append(input.charAt(i));
+                        input = input.substring(0, i) + input.substring(i + 1);
+
+                        setInput(input);
+                        return Parse(token.toString());
+                    }
+                } // if current symbol is ''' ->
+                else if (input.charAt(i) == '\'') {
+                    int j = i + 1;
+                    if (input.charAt(j) == '\\')
+                        j += 2;
+                    else
+                        j++;
+
+                    token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
+                    newToken.setType(Type.LITERAL_CONSTANT);
+                    newToken.setValue(input.substring(i, j + 1));
+                    input = input.substring(0, i) + input.substring(j + 1);
+
+                    setInput(input);
+
+                    return newToken;
+                }
+                // other literal constant
+                else if (input.charAt(i) == '"') {
+                    int j = i + 1;
+                    while (input.charAt(j) != '"')
+                        j++;
+                    token.append("[Literal constant -> ").append(input.substring(i, j + 1)).append("] ");
+                    newToken.setType(Type.LITERAL_CONSTANT);
+                    newToken.setValue(input.substring(i, j + 1));
+                    input = input.substring(0, i) + input.substring(j + 1);
+
+                    setInput(input);
+                    return newToken;
+                } // if it is delimiter or operator:
+                else if (Character.toString(input.charAt(i + 1)).equals(" ") ||
+                        CheckDelimiter(Character.toString(input.charAt(i + 1)))
+                        || CheckOperator(Character.toString(input.charAt(i + 1))) ||
+                        checkDouble(input.charAt(i) + "")) {
+
+                    // try to find numerical constant using 'i'
+                    if (input.contains("i")) {
+                        int j = 1;
+                        // find left bound
+                        while (j < input.length() && checkDouble(input.substring(0, j)) && input.charAt(j) != 'i')
+                            j++;
+
+                        if (input.charAt(j) == 'i') {
+                            // find right bound
+                            int pos = j + 1;
+                            j = pos + 1;
+                            while (j < input.length() && checkDouble(input.substring(pos, j)))
+                                j++;
+                            if (j != pos + 1) {
+                                newToken.setValue(input.substring(0, j));
+                                newToken.setType(Type.NUMERICAL_CONSTANT);
+                                input = input.substring(j);
+
+                                setInput(input);
+                                return newToken;
+                            }
+                        }
+                    }
+                    // try to find numerical constant using '\'
+                    if (input.contains("\\")) {
+                        int j = 1;
+                        // find left bound
+                        while (j < input.length() && checkInteger(input.substring(0, j)) && input.charAt(j) != '\\')
+                            j++;
+
+                        if (input.charAt(j) == '\\') {
+                            // find right bound
+                            int pos = j + 1;
+                            j = pos + 1;
+                            while (j < input.length() && checkInteger(input.substring(pos, j)))
+                                j++;
+                            if (j != pos + 1) {
+                                newToken.setValue(input.substring(0, j));
+                                newToken.setType(Type.NUMERICAL_CONSTANT);
+                                input = input.substring(j);
+
+                                setInput(input);
+                                return newToken;
+                            }
+                        }
+                    }
+                    // default(check floating number)
+                    if (Parse(input.substring(0, i + 1)).getType().name()
+                            .equals(Type.NUMERICAL_CONSTANT.name())
+                            && input.charAt(i + 1) == '.') {
+                        int j = i + 2;
+
+                        // find right bound
+                        while (!(Character.toString(input.charAt(j)).equals(" ")) &&
+                                !CheckDelimiter(Character.toString(input.charAt(j))) &&
+                                !CheckOperator(Character.toString(input.charAt(j))))
+                            j++;
+
+                        // test that this input substring is correct integer
+
+                        if (Utils.isInteger(input.substring(i + 2, j))) {
+
+                            newToken.setValue(input.substring(0, j));
+                            // TODO: end all cases
+                            // here we found real number as numerical constant
+                            newToken.setType(Type.NUMERICAL_CONSTANT);
+                            input = input.substring(j);
+
+                            setInput(input);
+                            return newToken;
+                        }
+                    }
+
+                    token.append(input.substring(0, i + 1));
+                    input = input.substring(i + 1);
+
+                    setInput(input);
+                    return Parse(token.toString());
+                }
+
             }
-
+            // of there is no token -> return empty token
         }
-        // of there is no token -> return empty token
+        catch (Exception e) {
+            e.printStackTrace();
+//            System.out.println(e.getStackTrace());
+            System.out.println(input);
+        }
+            setInput(null);
+            return newToken;
 
-        setInput(null);
-        return newToken;
     }
 
-    private Token Parse(String input) {
+    private Token Parse(String stringToken) {
 
         StringBuilder str = new StringBuilder();
         Token token = new Token(Type.EOF, "");
 
         // if it is an integer:
-        System.out.println("here + " + input);
-        if (Utils.isInteger(input)) {
-            System.out.println("done + " + input);
+        if (Utils.isInteger(stringToken)) {
             // it is numerical constant
-            str.append("[Numerical constant -> \"" + input + "\"] ");
+            str.append("[Numerical constant -> \"" + stringToken + "\"] ");
             token.setType(Type.NUMERICAL_CONSTANT);
-            token.setValue(input);
+            token.setValue(stringToken);
             return token;
         }
 
         // new line
-        if (input.equals(inputLineSeparator)) {
+        if (stringToken.equals(inputLineSeparator)) {
             token.setType(Type.INPUT_LINE_SEPARATOR);
             token.setValue(inputLineSeparator);
             return token;
         }
 
         // if it is a keyword:
-        if (CheckKeyword(input)) {
-            str.append("[Keyword -> \"" + input + "\"] ");
+        if (CheckKeyword(stringToken)) {
+            str.append("[Keyword -> \"" + stringToken + "\"] ");
             token.setType(Type.KEYWORD);
-            token.setValue(input);
+            token.setValue(stringToken);
             return token;
         }
 
         // if it is an operator:
-        if (CheckOperator(input)) {
-            str.append("[Operator -> \"" + input + "\"] ");
+        if (CheckOperator(stringToken)) {
+            str.append("[Operator -> \"" + stringToken + "\"] ");
             token.setType(Type.OPERATOR);
-            token.setValue(input);
+            token.setValue(stringToken);
             return token;
         }
 
         // if it is a delimiter
-        if (CheckDelimiter(input)) {
-            str.append("[Delimiter -> \"" + input + "\"] ");
+        if (CheckDelimiter(stringToken)) {
+            str.append("[Delimiter -> \"" + stringToken + "\"] ");
             token.setType(Type.DELIMITER);
-            token.setValue(input);
+            token.setValue(stringToken);
             return token;
         }
 
         // else it is identifer
-        str.append("[Identifier -> \"" + input + "\"] ");
+        str.append("[Identifier -> \"" + stringToken + "\"] ");
         token.setType(Type.IDENTIFIER);
-        token.setValue(input);
+        token.setValue(stringToken);
         return token;
     }
 }

@@ -1,4 +1,5 @@
 import model.Token;
+import model.Type;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -18,26 +19,13 @@ public class Main {
         // while we have lexical atoms:
         while ((input = analyzer.getInput()) != null) {
             Token nextToken = analyzer.GetNextLexicalAtom(input);
-            out.print(nextToken.getType().name() + " " + nextToken.getValue() + "!");
+            if (nextToken.getType() != Type.INPUT_LINE_SEPARATOR) {
+                out.print(nextToken.getType().name() + " " + nextToken.getValue() + "\n");
+            }
+            else {
+                out.print(nextToken.getValue());
+            };
         }
         out.close();
-//        BufferedReader reader = new BufferedReader(new FileReader(args[0]));
-//
-//        String line = "";
-//        while ((line = reader.readLine()) != null) {
-//            line = line
-//                    .replaceAll("//.+$", "")
-//                    .replaceAll("=", " = ")
-//                    .replaceAll("<", " < ")
-//                    .replaceAll(">", " > ")
-//                    .replaceAll("/", " / ")
-//                    .replaceAll("<  =", "<=")
-//                    .replaceAll(">  =", ">=")
-//                    .replaceAll("=  >", "=>")
-//                    .replaceAll("=  =", "==")
-//                    .replaceAll("/  =", "/=")
-//                    .replaceAll("(\\+|-|\\*|/|\\(|\\)|\\{|}|\\.|\\^|\\[|\\]|\\\\|:|,)", " $1 ");
-//            System.out.println(line);
-//        }
     }
 }
