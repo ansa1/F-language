@@ -6,7 +6,7 @@ grammar F;
 /*Basic concepts*/
 translationunit
 :
-	(primary)? EOF
+	(declaration)? EOF
 ;
 program
 :
@@ -14,7 +14,7 @@ program
 ;
 declaration
 :
-    identifier (':'  type)?  'is'  expression
+    Identifier (':'  type)?  'is'  expression
 ;
 expressions
 :
@@ -57,23 +57,22 @@ tail
 :
     '(' (expressions)? ')'
     | (expression)?
-    | '.' identifier
+    | '.' Identifier
     | '.' integer_literal
 ;
 elementary
 :
-    'false'
-    | 'true'
+    bool_literal
     | integer_literal
     | real_literal
     | rational_literal
     | complex_literal
     | string_literal
-    | identifier
+    | Identifier
 ;
 function
 :
-    'func (' (parameters)? ')'  (':' type)? body
+    'func' '(' (parameters)? ')'  (':' type)? body
 ;
 parameters
 :
@@ -90,7 +89,7 @@ tuple
 ;
 tuple_element
 :
-    (identifier 'is')? elementary
+    (Identifier 'is')? elementary
 ;
 map
 :
@@ -140,12 +139,17 @@ conditional
 ;
 loop
 :
-    'for' (identifier 'in')? expression ('..' expression)? loop_body
+    'for' (Identifier 'in')? expression ('..' expression)? loop_body
     | ('while' expression)? loop_body
 ;
 loop_body
 :
     'loop'  statements 'end'
+;
+
+bool_literal
+:
+    'true'|'false'
 ;
 
 integer_literal
@@ -158,7 +162,7 @@ real_literal
 ;
 string_literal
 :
-    '\'' STRING '\''
+    '\'' .+? '\''
 ;
 complex_literal
 :
@@ -179,28 +183,22 @@ REAL
     INTEGER ('.' INTEGER)?
 ;
 
-
-NONDIGIT
-:
-	 [a-z]
-;
-
+fragment
 STRING
 :
-    [A-Za-z0-9_]+
+    .
 ;
 
-identifier
+Identifier
 :
-	identifiernondigit
+    [a-zA-Z_][a-zA-Z0-9_]+
+//	Identifiernondigit
+//	(
+//	Identifiernondigit | DIGIT
+//	)*
 ;
 
-identifiernondigit
-:
-	NONDIGIT+
-;
-
-
+fragment
 DIGIT
 :
 	[0-9]
@@ -209,6 +207,14 @@ DIGIT
 Whitespace
 :
 	[ \t]+ -> skip
+;
+
+Newline
+:
+	(
+		'\r' '\n'?
+		| '\n'
+	) -> skip
 ;
 
 MultiLineMacro

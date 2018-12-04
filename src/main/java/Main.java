@@ -17,6 +17,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
-
+        String a = "asdasdasdas";
+        a = a.replaceAll("[a-zA-Z][a-zA-Z0-9_]+", "");
     }
 }
