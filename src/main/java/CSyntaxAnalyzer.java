@@ -1,5 +1,5 @@
-import antlr.CLexer;
-import antlr.CParser;
+import antlr.FLexer;
+import antlr.FParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -37,11 +37,11 @@ public class CSyntaxAnalyzer {
     }
 
     public void analyze() {
-        CLexer lexer = new CLexer(CharStreams.fromString(this.input));
+        FLexer lexer = new FLexer(CharStreams.fromString(this.input));
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CParser parser = new CParser(tokens);
+        FParser parser = new FParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         this.AST = parser.translationunit();
@@ -50,12 +50,12 @@ public class CSyntaxAnalyzer {
     // start program and read `in.txt` file, then save AST
     public void analyze(String inputPath) {
         initInput(inputPath);
-        CLexer lexer = new CLexer(CharStreams.fromString(this.input));
+        FLexer lexer = new FLexer(CharStreams.fromString(this.input));
         // addition1: to handle errors
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CParser parser = new CParser(tokens);
+        FParser parser = new FParser(tokens);
         // addition2: to handle errors
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);

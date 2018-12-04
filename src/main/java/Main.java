@@ -6,8 +6,8 @@ public class Main {
         // Try to find a tree, which can describe input
         try {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
-            cSyntaxAnalyzer.analyze("../in.txt");
-            cSyntaxAnalyzer.serializeTree("../out.txt");
+            cSyntaxAnalyzer.analyze("./in.txt");
+            cSyntaxAnalyzer.serializeTree("./out.txt");
         } catch (Exception err) {
             // Else there are errors, which program writes to console
             System.out.println("An error occured while performing syntax analysis. Please see log.txt");
