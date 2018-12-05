@@ -3,6 +3,7 @@ import antlr.FLexer;
 import antlr.FParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
@@ -37,17 +38,6 @@ public class CSyntaxAnalyzer {
 
     public CSyntaxAnalyzer(String inputPath) {
         initInput(inputPath);
-    }
-
-    public void analyze() {
-        FLexer lexer = new FLexer(CharStreams.fromString(this.input));
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        FParser parser = new FParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-        this.AST = parser.translationunit();
     }
 
     // start program and read `in.txt` file, then save AST

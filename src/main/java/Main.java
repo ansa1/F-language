@@ -10,9 +10,13 @@ public class Main {
         try {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
             ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
-            cSyntaxAnalyzer.serializeTree("./out.txt");
             FTreeVisitor<String> visitor = new FTreeVisitor<>();
             visitor.visit(AST);
+//            FTreeTrimVisitor<ParseTree> visitor1 = new FTreeTrimVisitor<>();
+//            AST = visitor1.visit(AST);
+//            cSyntaxAnalyzer.serializeTree("./out.txt");
+//            ParseTree AST = cSyntaxAnalyzer.trimTree();
+            cSyntaxAnalyzer.serializeTree("./out.txt");
         } catch (Exception err) {
             // Else there are errors, which program writes to console
             System.out.println("An error occured while performing syntax analysis. Please see log.txt");

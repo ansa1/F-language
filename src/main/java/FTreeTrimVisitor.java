@@ -2,38 +2,39 @@ import antlr.FParser;
 import antlr.FVisitor;
 import org.antlr.v4.runtime.tree.*;
 
-import java.util.HashMap;
-import java.util.Stack;
 
-
-public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVisitor<T> {
-
-    Stack<HashMap<String, String>> stack = new Stack<>();
-
-    private void initStack() {
-        if (stack.isEmpty()) {
-            stack.push(new HashMap<>());
-        }
-    }
+public class FTreeTrimVisitor<T> extends AbstractParseTreeVisitor<T> implements FVisitor<T> {
 
     @Override
     public T visitTranslationunit(FParser.TranslationunitContext ctx) {
-        initStack();
-        return visitChildren(ctx);
+        ParseTree newCtx = ctx;
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            if (ctx.getChild(i).getText().equals(ctx.getText())) {
+                newCtx = ctx.getChild(i);
+                break;
+            }
+        }
+        System.out.println(ctx.getText());
+        System.out.println(ctx.program().getText());
+        return visitChildren((RuleNode) newCtx);
     }
 
     @Override
     public T visitProgram(FParser.ProgramContext ctx) {
+        for (int i = 0; i < ctx.getChildCount(); i++) {
+            System.out.println("1" + ctx.getChild(i).getText());
+            System.out.println("2" + ctx.getText());
+            if (ctx.getChild(i).getText().equals(ctx.getText())) {
+                System.out.println("here");
+                ctx = (FParser.ProgramContext) ctx.getChild(i);
+                break;
+            }
+        }
         return visitChildren(ctx);
     }
 
     @Override
     public T visitDeclaration(FParser.DeclarationContext ctx) {
-        String identName = ctx.identifier().getText();
-        String identType = "";
-        System.out.println(identName);
-        System.out.println(identType);
-        stack.peek().put(identName, identType);
         return visitChildren(ctx);
     }
 
@@ -58,8 +59,7 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
     }
 
     @Override
-    public T visitTerm(FParser.TermContext ctx)
-    {
+    public T visitTerm(FParser.TermContext ctx) {
         return visitChildren(ctx);
     }
 
@@ -110,14 +110,11 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 
     @Override
     public T visitBody_start(FParser.Body_startContext ctx) {
-        HashMap clone = (HashMap) stack.peek().clone();
-        stack.push(clone);
         return visitChildren(ctx);
     }
 
     @Override
     public T visitBody_end(FParser.Body_endContext ctx) {
-        stack.pop();
         return visitChildren(ctx);
     }
 
@@ -193,14 +190,11 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 
     @Override
     public T visitLoop_body_start(FParser.Loop_body_startContext ctx) {
-        HashMap clone = (HashMap) stack.peek().clone();
-        stack.push(clone);
         return visitChildren(ctx);
     }
 
     @Override
     public T visitLoop_body_end(FParser.Loop_body_endContext ctx) {
-        stack.pop();
         return visitChildren(ctx);
     }
 
@@ -236,10 +230,6 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 
     @Override
     public T visitIdentifier(FParser.IdentifierContext ctx) {
-        if (!stack.peek().containsKey(ctx.IdentifierName().getText())) {
-            System.out.println(ctx.IdentifierName().getText());
-            System.out.println("failed");
-        }
         return visitChildren(ctx);
     }
 }

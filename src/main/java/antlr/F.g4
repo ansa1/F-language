@@ -14,7 +14,7 @@ program
 ;
 declaration
 :
-    (Identifier (':' type)? 'is' expression)
+    (identifier (':' type)? 'is' expression)
 ;
 
 expressions
@@ -23,23 +23,23 @@ expressions
 ;
 expression
 :
-    relation (('and' | 'or' | 'xor') relation)?
+    relation (op=('and' | 'or' | 'xor') relation)?
 ;
 relation
 :
-    factor (('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
+    factor (op=('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
 ;
 factor
 :
-    term (('+' | '-') term)*
+    left=term (op=('+' | '-') right=term)*
 ;
 term
 :
-    unary (('*' | '/') unary)*
+    unary (op=('*' | '/') unary)*
 ;
 unary
 :
-    ('+' | '-')? secondary
+    sign=('+' | '-')? secondary
 ;
 secondary
 :
@@ -58,7 +58,7 @@ tail
 :
     '(' (expressions)? ')'
     | '[' (expression)? ']'
-    | '.' Identifier (tail)?
+    | '.' identifier (tail)?
     | '.' integer_literal
 ;
 elementary
@@ -69,7 +69,7 @@ elementary
     | rational_literal
     | complex_literal
     | string_literal
-    | Identifier
+    | identifier
 ;
 function
 :
@@ -78,7 +78,7 @@ function
 
 fun_declaration
 :
-    Identifier ':' type
+    identifier ':' type
 ;
 
 parameters
@@ -106,7 +106,7 @@ tuple
 ;
 tuple_element
 :
-    (Identifier 'is')? elementary
+    (identifier 'is')? elementary
 ;
 map
 :
@@ -148,7 +148,7 @@ statement
 ;
 assignment_or_call
 :
-    secondary (':=' expression)?
+    identifier (tail)? (':=' expression)?
 ;
 conditional
 :
@@ -167,7 +167,7 @@ else_statement
 
 loop
 :
-    'for' (Identifier 'in')? expression ('..' expression)? loop_body
+    'for' (identifier 'in')? expression ('..' expression)? loop_body
     | ('while' expression)? loop_body
 ;
 loop_body
@@ -228,11 +228,15 @@ STRING
     .
 ;
 
-Identifier
+identifier
+:
+    IdentifierName
+;
+
+IdentifierName
 :
     [a-zA-Z_][a-zA-Z0-9_]*
 ;
-
 fragment
 DIGIT
 :
