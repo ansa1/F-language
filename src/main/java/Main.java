@@ -11,11 +11,12 @@ public class Main {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
             ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
             cSyntaxAnalyzer.serializeTree("./out.txt");
-            System.out.println(TreeTraverser.cont.peek().keySet());
+            FTreeVisitor<String> visitor = new FTreeVisitor<>();
+            visitor.visit(AST);
         } catch (Exception err) {
             // Else there are errors, which program writes to console
             System.out.println("An error occured while performing syntax analysis. Please see log.txt");
-            try (PrintWriter out = new PrintWriter("../log.txt")) {
+            try (PrintWriter out = new PrintWriter("log.txt")) {
                 out.println(err);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

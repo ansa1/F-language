@@ -63,9 +63,7 @@ public class CSyntaxAnalyzer {
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         // Entry point
-        this.AST = parser.program();
-//        System.out.println(parser.program().getChild(0));
-//        System.out.println(parser.program().getChildCount());
+        this.AST = parser.translationunit();
         return AST;
     }
 

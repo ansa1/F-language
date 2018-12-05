@@ -1,1 +1,6 @@
-info is (name is "John", age is 21, 0.325)
+b is 12;
+a:integer is 12;
+f is func() do
+    k is 12;
+    b.pop() := k
+end

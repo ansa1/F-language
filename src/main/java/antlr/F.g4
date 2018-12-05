@@ -14,8 +14,9 @@ program
 ;
 declaration
 :
-    Identifier (':'  type)?  'is'  expression
+    (Identifier (':' type)? 'is' expression)
 ;
+
 expressions
 :
     expression (','  expression)*
@@ -56,8 +57,8 @@ primary
 tail
 :
     '(' (expressions)? ')'
-    | (expression)?
-    | '.' Identifier
+    | '[' (expression)? ']'
+    | '.' Identifier (tail)?
     | '.' integer_literal
 ;
 elementary
@@ -86,8 +87,18 @@ parameters
 ;
 body
 :
-    'do' statements 'end'
-    | '=>' expression
+    (body_start statements body_end)
+    | ('=>' expression)
+;
+
+body_start
+:
+    'do'
+;
+
+body_end
+:
+    'end'
 ;
 tuple
 :
@@ -141,8 +152,19 @@ assignment_or_call
 ;
 conditional
 :
-    'if' expression 'then' statements ('else' statements)? 'end'
+    'if' expression then_statement else_statement? 'end'
 ;
+
+then_statement
+:
+    'then' statements
+;
+
+else_statement
+:
+    'else' statements
+;
+
 loop
 :
     'for' (Identifier 'in')? expression ('..' expression)? loop_body
@@ -150,7 +172,17 @@ loop
 ;
 loop_body
 :
-    'loop'  statements 'end'
+    loop_body_start statements loop_body_end
+;
+
+loop_body_start
+:
+    'loop'
+;
+
+loop_body_end
+:
+    'end'
 ;
 
 bool_literal
@@ -169,6 +201,7 @@ real_literal
 string_literal
 :
     '\'' .+? '\''
+    | '"' .+? '"'
 ;
 complex_literal
 :
