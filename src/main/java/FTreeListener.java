@@ -11,10 +11,13 @@ public class FTreeListener implements FListener {
 
     public FTreeListener() {
         result = new StringBuilder();
+        functionArgs = new HashMap<>();
     }
 
     Stack<HashMap<String, String>> stack = new Stack<>();
     StringBuilder result;
+
+    private static HashMap<String, Integer> functionArgs;
 
     private void initStack() {
         if (stack.isEmpty()) {
@@ -33,6 +36,7 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitTranslationunit(FParser.TranslationunitContext ctx) {
+
     }
 
     @Override
@@ -41,6 +45,7 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitProgram(FParser.ProgramContext ctx) {
+
     }
 
     @Override
@@ -68,10 +73,11 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitDeclaration(FParser.DeclarationContext ctx) {
-        System.out.println(ctx.identifier().getText());
-//        System.out.println(ctx.expression().getText());
-        int k = calculateParams(ctx.expression().getText());
-        System.out.println(k);
+//        int k = calculateParams(ctx.expression().getText());
+//        if (k != -1) {
+//            System.out.println(ctx.identifier().getText());
+//            functionArgs.put(ctx.identifier().getText(), k);
+//        }
     }
 
     @Override
@@ -81,7 +87,6 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitExpressions(FParser.ExpressionsContext ctx) {
-
     }
 
     @Override
@@ -91,6 +96,7 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitExpression(FParser.ExpressionContext ctx) {
+
     }
 
     @Override
@@ -331,7 +337,21 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
-
+//        String full = ctx.getText();
+//        if (full != null) {
+//            String identName = ctx.identifier().getText();
+//            int i = identName.length();
+//            String expression = ctx.tail().getText();
+//            int amount = 0;
+//            if (expression.charAt(0) == '(' && expression.charAt(expression.length()-1) == ')') {
+//                amount = expression.split(",").length;
+//            }
+//            if (expression.matches("\\(\\s*\\)")) amount = 0;
+//            if (amount != functionArgs.get(identName)) {
+//                result.append(String.format("Illegal function call, function : {} requires {} param ",
+//                        identName, amount));
+//            }
+//        }
     }
 
     @Override

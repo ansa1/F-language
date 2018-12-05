@@ -63,10 +63,10 @@ tail
 elementary
 :
     bool_literal
-    | integer_literal
     | complex_literal
     | real_literal
     | rational_literal
+    | integer_literal
     | string_literal
     | identifier
 ;
