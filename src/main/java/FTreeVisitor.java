@@ -31,9 +31,8 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
     public T visitDeclaration(FParser.DeclarationContext ctx) {
         String identName = ctx.identifier().getText();
         String identType = "";
-        System.out.println(identName);
-        System.out.println(identType);
         stack.peek().put(identName, identType);
+        System.out.println(identName);
         return visitChildren(ctx);
     }
 
@@ -44,6 +43,7 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 
     @Override
     public T visitExpression(FParser.ExpressionContext ctx) {
+        System.out.println(ctx.getParent().getText());
         return visitChildren(ctx);
     }
 
@@ -94,7 +94,19 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
     }
 
     @Override
+    public T visitFunc_begin(FParser.Func_beginContext ctx) {
+        HashMap clone = (HashMap) stack.peek().clone();
+        stack.push(clone);
+        System.out.println("NEWSCOPE");
+        return null;
+    }
+
+    @Override
     public T visitFun_declaration(FParser.Fun_declarationContext ctx) {
+        String identName = ctx.identifier().getText();
+        String identType = "";
+        stack.peek().put(identName, identType);
+        System.out.println("!" + identName);
         return visitChildren(ctx);
     }
 
@@ -110,14 +122,13 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 
     @Override
     public T visitBody_start(FParser.Body_startContext ctx) {
-        HashMap clone = (HashMap) stack.peek().clone();
-        stack.push(clone);
         return visitChildren(ctx);
     }
 
     @Override
     public T visitBody_end(FParser.Body_endContext ctx) {
         stack.pop();
+        System.out.println("DELETESCOPE");
         return visitChildren(ctx);
     }
 
@@ -187,20 +198,17 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
     }
 
     @Override
+    public T visitFor_loop(FParser.For_loopContext ctx) {
+        return null;
+    }
+
+    @Override
+    public T visitWhile_loop(FParser.While_loopContext ctx) {
+        return null;
+    }
+
+    @Override
     public T visitLoop_body(FParser.Loop_bodyContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public T visitLoop_body_start(FParser.Loop_body_startContext ctx) {
-        HashMap clone = (HashMap) stack.peek().clone();
-        stack.push(clone);
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public T visitLoop_body_end(FParser.Loop_body_endContext ctx) {
-        stack.pop();
         return visitChildren(ctx);
     }
 

@@ -10,12 +10,6 @@ public class Main {
         try {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
             ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
-            FTreeVisitor<String> visitor = new FTreeVisitor<>();
-            visitor.visit(AST);
-//            FTreeTrimVisitor<ParseTree> visitor1 = new FTreeTrimVisitor<>();
-//            AST = visitor1.visit(AST);
-//            cSyntaxAnalyzer.serializeTree("./out.txt");
-//            ParseTree AST = cSyntaxAnalyzer.trimTree();
             cSyntaxAnalyzer.serializeTree("./out.txt");
         } catch (Exception err) {
             // Else there are errors, which program writes to console

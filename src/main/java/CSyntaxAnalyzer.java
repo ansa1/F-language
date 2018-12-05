@@ -52,8 +52,11 @@ public class CSyntaxAnalyzer {
         // addition2: to handle errors
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+        FTreeListener listener = new FTreeListener();
+        parser.addParseListener(listener);
         // Entry point
         this.AST = parser.translationunit();
+        System.out.println(listener.getResult());
         return AST;
     }
 

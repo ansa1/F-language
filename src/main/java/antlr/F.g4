@@ -73,7 +73,12 @@ elementary
 ;
 function
 :
-    'func' '(' (parameters)? ')'  (':' type)? body
+    func_begin '(' (parameters)? ')'  (':' type)? body
+;
+
+func_begin
+:
+    'func'
 ;
 
 fun_declaration
@@ -88,7 +93,7 @@ parameters
 body
 :
     (body_start statements body_end)
-    | ('=>' expression)
+    | ( '=>' expression)
 ;
 
 body_start
@@ -100,6 +105,7 @@ body_end
 :
     'end'
 ;
+
 tuple
 :
     '(' tuple_element (',' tuple_element)* ')'
@@ -110,11 +116,11 @@ tuple_element
 ;
 map
 :
-    '{' map_element '}'
+    '{' map_element (',' map_element)* '}'
 ;
 map_element
 :
-    string_literal ':' elementary
+    elementary ':' elementary
 ;
 list
 :
@@ -167,22 +173,22 @@ else_statement
 
 loop
 :
-    'for' (identifier 'in')? expression ('..' expression)? loop_body
-    | ('while' expression)? loop_body
+    for_loop | while_loop
 ;
+
+for_loop
+:
+    'for' (identifier 'in')? expression ('..' expression)? loop_body
+;
+
+while_loop
+:
+    'while' expression loop_body
+;
+
 loop_body
 :
-    loop_body_start statements loop_body_end
-;
-
-loop_body_start
-:
-    'loop'
-;
-
-loop_body_end
-:
-    'end'
+    'loop' statements 'end'
 ;
 
 bool_literal
