@@ -1,3 +1,6 @@
+import antlr.FBaseVisitor;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -6,8 +9,9 @@ public class Main {
         // Try to find a tree, which can describe input
         try {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
-            cSyntaxAnalyzer.analyze("./in.txt");
+            ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
             cSyntaxAnalyzer.serializeTree("./out.txt");
+            System.out.println(TreeTraverser.cont.peek().keySet());
         } catch (Exception err) {
             // Else there are errors, which program writes to console
             System.out.println("An error occured while performing syntax analysis. Please see log.txt");
@@ -17,7 +21,6 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        String a = "asdasdasdas";
-        a = a.replaceAll("[a-zA-Z][a-zA-Z0-9_]+", "");
+
     }
 }

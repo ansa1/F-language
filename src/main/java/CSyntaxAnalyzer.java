@@ -1,8 +1,11 @@
+import antlr.FBaseVisitor;
 import antlr.FLexer;
 import antlr.FParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,7 +51,7 @@ public class CSyntaxAnalyzer {
     }
 
     // start program and read `in.txt` file, then save AST
-    public void analyze(String inputPath) {
+    public ParseTree analyze(String inputPath) {
         initInput(inputPath);
         FLexer lexer = new FLexer(CharStreams.fromString(this.input));
         // addition1: to handle errors
@@ -60,7 +63,10 @@ public class CSyntaxAnalyzer {
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         // Entry point
-        this.AST = parser.translationunit();
+        this.AST = parser.program();
+//        System.out.println(parser.program().getChild(0));
+//        System.out.println(parser.program().getChildCount());
+        return AST;
     }
 
     // write AST tree as JSON to output

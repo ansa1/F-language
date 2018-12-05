@@ -1,5 +1,1 @@
-asde is func (p : bool is 123) : bool do
-    qwe is 213;
-    qwe(asdqwe, asdqwe);
-    eqwe is 123
-end
+info is (name is "John", age is 21, 0.325)

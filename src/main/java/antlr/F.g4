@@ -6,7 +6,7 @@ grammar F;
 /*Basic concepts*/
 translationunit
 :
-	(declaration)? EOF
+	(program)? EOF
 ;
 program
 :
@@ -74,9 +74,15 @@ function
 :
     'func' '(' (parameters)? ')'  (':' type)? body
 ;
+
+fun_declaration
+:
+    Identifier ':' type
+;
+
 parameters
 :
-    declaration (',' declaration)*
+    fun_declaration (',' fun_declaration)*
 ;
 body
 :
@@ -180,7 +186,7 @@ INTEGER
 
 REAL
 :
-    INTEGER ('.' INTEGER)?
+    DIGIT+ ('.' DIGIT+)?
 ;
 
 fragment
@@ -191,11 +197,7 @@ STRING
 
 Identifier
 :
-    [a-zA-Z_][a-zA-Z0-9_]+
-//	Identifiernondigit
-//	(
-//	Identifiernondigit | DIGIT
-//	)*
+    [a-zA-Z_][a-zA-Z0-9_]*
 ;
 
 fragment
