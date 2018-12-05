@@ -48,16 +48,30 @@ public class FTreeListener implements FListener {
 
     }
 
-    private int calculateParams(FParser.DeclarationContext ctx) {
-
-        return 0;
+    private int calculateParams(String expression) {
+        int amount = 0;
+        if (expression.length() > 6 && expression.substring(0, 4).equals("func")) {
+            if (expression.substring(4, 6).equals("()"))
+                return amount;
+            else {
+                int i = 4;
+                while (expression.charAt(i) != ')') {
+                    if (expression.charAt(i) == ':')
+                        amount++;
+                    i++;
+                }
+                return amount;
+            }
+        }
+        return -1;
     }
 
     @Override
     public void exitDeclaration(FParser.DeclarationContext ctx) {
         System.out.println(ctx.identifier().getText());
-        System.out.println(ctx.expression().getText());
-        int k = calculateParams(ctx);
+//        System.out.println(ctx.expression().getText());
+        int k = calculateParams(ctx.expression().getText());
+        System.out.println(k);
     }
 
     @Override

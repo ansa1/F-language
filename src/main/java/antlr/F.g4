@@ -59,15 +59,14 @@ tail
     '(' (expressions)? ')'
     | '[' (expression)? ']'
     | '.' identifier (tail)?
-    | '.' integer_literal
 ;
 elementary
 :
     bool_literal
     | integer_literal
+    | complex_literal
     | real_literal
     | rational_literal
-    | complex_literal
     | string_literal
     | identifier
 ;
@@ -225,7 +224,7 @@ INTEGER
 
 REAL
 :
-    DIGIT+ ('.' DIGIT+)?
+    INTEGER ('.' INTEGER)?
 ;
 
 fragment
