@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +20,9 @@ public class TreeTraverser {
         traverse(tree, map);
         return map;
     }
+
+    public static Stack<HashMap<String, String>> cont = new Stack<>();
+    public static HashMap<String, Integer> functions = new HashMap<>();
 
     // Firstly, traverse the tree and map results
     private static void traverse(ParseTree tree, Map<String, Object> map) {

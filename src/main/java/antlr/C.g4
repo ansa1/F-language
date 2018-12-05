@@ -130,7 +130,7 @@ postfixexpression
 ;
 
 /*
-add a middle layer to eliminate duplicated function declarations
+add a middle layer to eliminate duplicated functions declarations
 */
 typeidofexpr
 :
@@ -1981,11 +1981,7 @@ Universalcharactername
 
 Identifier
 :
-/*
-	Identifiernondigit
-	| Identifier Identifiernondigit
-	| Identifier DIGIT
-	*/
+
 	Identifiernondigit
 	(
 		Identifiernondigit

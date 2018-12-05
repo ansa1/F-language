@@ -1,8 +1,12 @@
-import antlr.CLexer;
-import antlr.CParser;
+import antlr.FBaseVisitor;
+import antlr.FLexer;
+import antlr.FParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,31 +40,21 @@ public class CSyntaxAnalyzer {
         initInput(inputPath);
     }
 
-    public void analyze() {
-        CLexer lexer = new CLexer(CharStreams.fromString(this.input));
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CParser parser = new CParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-        this.AST = parser.translationunit();
-    }
-
     // start program and read `in.txt` file, then save AST
-    public void analyze(String inputPath) {
+    public ParseTree analyze(String inputPath) {
         initInput(inputPath);
-        CLexer lexer = new CLexer(CharStreams.fromString(this.input));
+        FLexer lexer = new FLexer(CharStreams.fromString(this.input));
         // addition1: to handle errors
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CParser parser = new CParser(tokens);
+        FParser parser = new FParser(tokens);
         // addition2: to handle errors
         parser.removeErrorListeners();
         parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         // Entry point
         this.AST = parser.translationunit();
+        return AST;
     }
 
     // write AST tree as JSON to output
