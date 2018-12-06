@@ -13,6 +13,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     public static final double SMALL_VALUE = 0.00000000001;
 
     Stack<HashMap<String, Value>> stack = new Stack<>();
+    Stack<HashMap<String, FParser.ExpressionContext>> stackFun = new Stack<>();
 
     private void initStack() {
         if (stack.isEmpty()) {
@@ -20,9 +21,16 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
         }
     }
 
+    private void initStackFun() {
+        if (stackFun.isEmpty()) {
+            stackFun.push(new HashMap<>());
+        }
+    }
+
     @Override
     public Value visitTranslationunit(FParser.TranslationunitContext ctx) {
         initStack();
+        initStackFun();
         return visitChildren(ctx);
     }
 
@@ -34,12 +42,15 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     @Override
     public Value visitDeclaration(FParser.DeclarationContext ctx) {
         if(ctx.expression().getText().contains("func")) {
-            //TODO func
+            if(ctx.identifier().getText().equals("main")) {
+                return visitChildren(ctx);
+            }
+            stackFun.peek().put(ctx.identifier().getText(), ctx.expression());
         }
         else {
             stack.peek().put(ctx.identifier().getText(), this.visit(ctx.expression()));
         }
-        return visitChildren(ctx);
+        return null;
     }
 
     @Override
@@ -187,7 +198,6 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     } else if (left.isInteger() && right.isDouble()) {
                         return new Value(left.asInteger() + right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
-                        System.out.println(left.asInteger() + right.asInteger());
                         return new Value(left.asInteger() + right.asInteger());
                     } else if (left.isRational() && right.isRational()) {
                         return new Value(Utils.rational_sum(left.asRational(), right.asRational()));
