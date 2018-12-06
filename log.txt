@@ -1,1 +1,1 @@
-java.lang.NullPointerException
+java.lang.ClassCastException: Complex cannot be cast to java.lang.Double

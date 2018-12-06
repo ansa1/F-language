@@ -27,7 +27,7 @@ expression
 ;
 relation
 :
-    factor (op=('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
+    left=factor (op=('<' | '<=' | '>' | '>=' | '=' | '/=') right=factor)?
 ;
 factor
 :
@@ -35,11 +35,11 @@ factor
 ;
 term
 :
-    unary (op=('*' | '/') unary)*
+    left=unary (op=('*' | '/') right=unary)*
 ;
 unary
 :
-    sign=('+' | '-')? secondary
+    sign=('+' | '-')? exp=secondary
 ;
 secondary
 :
@@ -210,16 +210,21 @@ string_literal
 ;
 complex_literal
 :
-    REAL 'i' REAL
+     COMPLEX
 ;
 rational_literal
 :
-    INTEGER '\\' INTEGER
+    numerator=INTEGER '\\' denominator=INTEGER
 ;
 
 INTEGER
 :
     DIGIT+
+;
+
+COMPLEX
+:
+    REAL 'i' REAL
 ;
 
 REAL

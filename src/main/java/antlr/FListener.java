@@ -1,4 +1,4 @@
-// Generated from /Users/satellite/Code/Java/comicon/projectf/src/main/java/antlr/F.g4 by ANTLR 4.7
+// Generated from C:/Users/Petr/Documents/c_syntax_analyzer/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -147,16 +147,6 @@ public interface FListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunction(FParser.FunctionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FParser#func_begin}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunc_begin(FParser.Func_beginContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FParser#func_begin}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunc_begin(FParser.Func_beginContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FParser#fun_declaration}.
 	 * @param ctx the parse tree
@@ -338,26 +328,6 @@ public interface FListener extends ParseTreeListener {
 	 */
 	void exitLoop(FParser.LoopContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FParser#for_loop}.
-	 * @param ctx the parse tree
-	 */
-	void enterFor_loop(FParser.For_loopContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FParser#for_loop}.
-	 * @param ctx the parse tree
-	 */
-	void exitFor_loop(FParser.For_loopContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link FParser#while_loop}.
-	 * @param ctx the parse tree
-	 */
-	void enterWhile_loop(FParser.While_loopContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FParser#while_loop}.
-	 * @param ctx the parse tree
-	 */
-	void exitWhile_loop(FParser.While_loopContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FParser#loop_body}.
 	 * @param ctx the parse tree
 	 */
@@ -367,6 +337,26 @@ public interface FListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLoop_body(FParser.Loop_bodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FParser#loop_body_start}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_body_start(FParser.Loop_body_startContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#loop_body_start}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_body_start(FParser.Loop_body_startContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FParser#loop_body_end}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_body_end(FParser.Loop_body_endContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#loop_body_end}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_body_end(FParser.Loop_body_endContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FParser#bool_literal}.
 	 * @param ctx the parse tree

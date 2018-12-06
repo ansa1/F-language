@@ -1,4 +1,4 @@
-// Generated from /Users/satellite/Code/Java/comicon/projectf/src/main/java/antlr/F.g4 by ANTLR 4.7
+// Generated from C:/Users/Petr/Documents/c_syntax_analyzer/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -94,12 +94,6 @@ public interface FVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunction(FParser.FunctionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link FParser#func_begin}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunc_begin(FParser.Func_beginContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FParser#fun_declaration}.
 	 * @param ctx the parse tree
@@ -209,23 +203,23 @@ public interface FVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLoop(FParser.LoopContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FParser#for_loop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFor_loop(FParser.For_loopContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link FParser#while_loop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWhile_loop(FParser.While_loopContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link FParser#loop_body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLoop_body(FParser.Loop_bodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FParser#loop_body_start}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_body_start(FParser.Loop_body_startContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FParser#loop_body_end}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_body_end(FParser.Loop_body_endContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FParser#bool_literal}.
 	 * @param ctx the parse tree
