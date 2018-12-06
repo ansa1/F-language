@@ -1,35 +1,27 @@
-import model.Token;
-import model.Type;
-import org.apache.commons.io.FileUtils;
+import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.io.*;
-import lexical.FLexer;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main {
-
-    public static String parseLexical(String input) {
-        FLexer analyzer = new FLexer(input);
-
-        StringBuilder output = new StringBuilder();
-        while ((input = analyzer.getInput()) != null) {
-            Token nextToken = analyzer.GetNextLexicalAtom(input);
-            if (nextToken.getType() != Type.INPUT_LINE_SEPARATOR) {
-                output.append(nextToken.getType().name() + " " + nextToken.getValue() + "!" + "\n");
-            }
-            else {
-                output.append(nextToken.getValue());
+    public static void main(String[] args) throws Exception {
+        // Try to find a tree, which can describe input
+        try {
+            CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
+            ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
+            FTreeCodeGeneratorVisitor visitor = new FTreeCodeGeneratorVisitor();
+            visitor.visit(AST);
+            cSyntaxAnalyzer.serializeTree("./out.txt");
+        } catch (Exception err) {
+            // Else there are errors, which program writes to console
+            System.out.println("An error occured while performing syntax analysis. Please see log.txt");
+            try (PrintWriter out = new PrintWriter("log.txt")) {
+                out.println(err);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         }
-        return output.toString();
-    }
-
-    public static void main(String[] args) throws IOException {
-        File file = new File(args[0]);
-
-        // read all file
-        String input = FileUtils.readFileToString(file);
-        System.out.println(parseLexical(input));
-        // while we have lexical atoms:
 
     }
 }
