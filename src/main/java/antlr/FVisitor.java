@@ -107,12 +107,6 @@ public interface FVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFun_declaration(FParser.Fun_declarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FParser#parameters}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParameters(FParser.ParametersContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link FParser#body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -179,17 +173,35 @@ public interface FVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(FParser.StatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FParser#return_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_statement(FParser.Return_statementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FParser#print}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPrint(FParser.PrintContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FParser#assignment_or_call}.
+	 * Visit a parse tree produced by {@link FParser#assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssignment_or_call(FParser.Assignment_or_callContext ctx);
+	T visitAssignment(FParser.AssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FParser#assign_right_part}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssign_right_part(FParser.Assign_right_partContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link FParser#function_call}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction_call(FParser.Function_callContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link FParser#conditional}.
 	 * @param ctx the parse tree

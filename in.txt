@@ -1,21 +1,18 @@
+a is func(k: integer) do
+    return 11
+end;
+
 b is func() do
-    print 3
-end;
-
-a is func() do
-    k: integer is 0;
-    j is func() => print k;
-    j();
-    b()
-end;
-
-
-c is func() do
-    m is b(1, false)
+    print "b";
+    return 5
 end;
 
 main is func() do
-   a: integer is 9;
-   b is 3;
-   print a+b
-   end
+    a(2);
+    d is 0;
+    print "done";
+    d := 3;
+    d := a();
+    print d
+
+end

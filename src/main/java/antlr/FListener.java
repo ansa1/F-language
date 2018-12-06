@@ -168,16 +168,6 @@ public interface FListener extends ParseTreeListener {
 	 */
 	void exitFun_declaration(FParser.Fun_declarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FParser#parameters}.
-	 * @param ctx the parse tree
-	 */
-	void enterParameters(FParser.ParametersContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link FParser#parameters}.
-	 * @param ctx the parse tree
-	 */
-	void exitParameters(FParser.ParametersContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link FParser#body}.
 	 * @param ctx the parse tree
 	 */
@@ -288,6 +278,16 @@ public interface FListener extends ParseTreeListener {
 	 */
 	void exitStatement(FParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link FParser#return_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturn_statement(FParser.Return_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#return_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturn_statement(FParser.Return_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link FParser#print}.
 	 * @param ctx the parse tree
 	 */
@@ -298,15 +298,35 @@ public interface FListener extends ParseTreeListener {
 	 */
 	void exitPrint(FParser.PrintContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FParser#assignment_or_call}.
+	 * Enter a parse tree produced by {@link FParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignment_or_call(FParser.Assignment_or_callContext ctx);
+	void enterAssignment(FParser.AssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FParser#assignment_or_call}.
+	 * Exit a parse tree produced by {@link FParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignment_or_call(FParser.Assignment_or_callContext ctx);
+	void exitAssignment(FParser.AssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FParser#assign_right_part}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssign_right_part(FParser.Assign_right_partContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#assign_right_part}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssign_right_part(FParser.Assign_right_partContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FParser#function_call}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction_call(FParser.Function_callContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#function_call}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction_call(FParser.Function_callContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FParser#conditional}.
 	 * @param ctx the parse tree

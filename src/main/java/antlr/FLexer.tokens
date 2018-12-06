@@ -92,8 +92,8 @@ MultiLineMacro=59
 'complex'=33
 'string'=34
 '{}'=35
-'return'=36
-'break'=37
+'break'=36
+'return'=37
 'print'=38
 ':='=39
 'if'=40

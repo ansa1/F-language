@@ -378,6 +378,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunction(FParser.FunctionContext ctx) {
+
         return visitChildren(ctx);
     }
 
@@ -394,12 +395,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     @Override
     public Value visitFun_declaration(FParser.Fun_declarationContext ctx) {
         stack.peek().put(ctx.identifier().getText(), new Value(0));
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Value visitParameters(FParser.ParametersContext ctx) {
-        return visitChildren(ctx);
+        return null;
     }
 
     @Override
@@ -409,13 +405,13 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitBody_start(FParser.Body_startContext ctx) {
-        return visitChildren(ctx);
+        return null;
     }
 
     @Override
     public Value visitBody_end(FParser.Body_endContext ctx) {
         stack.pop();
-        return visitChildren(ctx);
+        return null;
     }
 
     @Override
@@ -450,12 +446,25 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitStatements(FParser.StatementsContext ctx) {
-        return visitChildren(ctx);
+        Value result = new Value(0);
+        for (int i = 0; i < ctx.statement().size(); i++) {
+            if (ctx.statement(i).return_statement() != null) {
+                result = visit(ctx.statement(i));
+            }
+            result = visit(ctx.statement(i));
+        }
+        return result;
     }
 
     @Override
     public Value visitStatement(FParser.StatementContext ctx) {
         return visitChildren(ctx);
+    }
+
+    @Override
+    public Value visitReturn_statement(FParser.Return_statementContext ctx) {
+        Value val = new Value(visit(ctx.expression()));
+        return val;
     }
 
     @Override
@@ -468,22 +477,39 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     }
 
     @Override
-    public Value visitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
-        //TODO func call
+    public Value visitAssignment(FParser.AssignmentContext ctx) {
+        Value newV = visit(ctx.assign_right_part());
         for(int i = 0; i < stack.size(); i++){
             HashMap<String, Value> tmp = stack.get(i);
             if(tmp.containsKey(ctx.identifier().getText())) {
                 Value old = tmp.get(ctx.identifier().getText());
-                Value newV = this.visit(ctx.expression());
+                System.out.println("!!!" + newV);
                 if((old.isBoolean() && !newV.isBoolean()) || (old.isComplex() && !newV.isComplex()) || (old.isDouble() && !newV.isDouble()) || (old.isInteger() && !newV.isInteger()) || (old.isRational() && !newV.isRational()))
                     throw new RuntimeException("types mismatch in " + ctx.getText());
                 tmp.replace(ctx.identifier().getText(), newV);
             }
         }
+        return null;
+    }
+
+    @Override
+    public Value visitAssign_right_part(FParser.Assign_right_partContext ctx) {
+        System.out.println(ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Value visitFunction_call(FParser.Function_callContext ctx) {
+        System.out.println("FUNC" + ctx.getText());
+        System.out.println(ctx.identifier().getText());
         for(int i = 0; i < stackFun.size(); i++) {
             HashMap<String, FParser.ExpressionContext> tmp = stackFun.get(i);
+            System.out.println(tmp.keySet());
             if(tmp.containsKey(ctx.identifier().getText())) {
-                return this.visit(tmp.get(ctx.identifier().getText()));
+                System.out.println(tmp.get(ctx.identifier().getText()).getText());
+                Value val = visit(tmp.get(ctx.identifier().getText()));
+                System.out.println("!!" + val.toString());
+                return val;
             }
         }
         return null;

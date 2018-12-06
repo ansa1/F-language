@@ -11,12 +11,14 @@ public class Main {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
             ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
             String result = cSyntaxAnalyzer.result;
-            if (result.equals("")) {
-                cSyntaxAnalyzer.serializeTree("./out.txt");
-                JarCreator.run();
-            } else {
-                System.out.println(result);
-            }
+            FTreeCodeGeneratorVisitor visitor = new FTreeCodeGeneratorVisitor();
+            visitor.visit(AST);
+//            if (result.equals("")) {
+//                cSyntaxAnalyzer.serializeTree("./out.txt");
+//                JarCreator.run();
+//            } else {
+//                System.out.println(result);
+//            }
         } catch (Exception err) {
             // Else there are errors, which program writes to console
             System.out.println("An error occured while syntax analysis:");

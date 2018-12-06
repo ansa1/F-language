@@ -56,8 +56,7 @@ primary
 ;
 tail
 :
-    '(' (expressions)? ')'
-    | '[' (expression)? ']'
+    '[' (expression)? ']'
     | '.' identifier (tail)?
 ;
 elementary
@@ -72,7 +71,7 @@ elementary
 ;
 function
 :
-    func_begin '(' (parameters)? ')'  (':' type)? body
+    func_begin '(' fun_declaration* ')'  (':' type)? body
 ;
 
 func_begin
@@ -85,10 +84,6 @@ fun_declaration
     identifier ':' type
 ;
 
-parameters
-:
-    fun_declaration (',' fun_declaration)*
-;
 body
 :
     (body_start statements body_end)
@@ -144,13 +139,19 @@ statements
 ;
 statement
 :
-    assignment_or_call
+    function_call
+    | assignment
     | conditional
     | loop
-    | 'return' (expression)?
+    | return_statement
     | 'break'
     | declaration
     | print
+;
+
+return_statement
+:
+    'return' (expression)?
 ;
 
 print
@@ -158,9 +159,20 @@ print
     'print' (expression (',' expression)*)?
 ;
 
-assignment_or_call
+assignment
 :
-    identifier (tail)? (':=' expression)?
+    identifier (tail)? ':=' assign_right_part
+;
+
+assign_right_part
+:
+    expression
+    | function_call
+;
+
+function_call
+:
+    identifier '(' (expression (',' expression)*)? ')'
 ;
 
 conditional

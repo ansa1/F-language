@@ -186,16 +186,6 @@ public class FTreeListener implements FListener {
     }
 
     @Override
-    public void enterParameters(FParser.ParametersContext ctx) {
-
-    }
-
-    @Override
-    public void exitParameters(FParser.ParametersContext ctx) {
-
-    }
-
-    @Override
     public void enterBody(FParser.BodyContext ctx) {
 
     }
@@ -306,6 +296,16 @@ public class FTreeListener implements FListener {
     }
 
     @Override
+    public void enterReturn_statement(FParser.Return_statementContext ctx) {
+
+    }
+
+    @Override
+    public void exitReturn_statement(FParser.Return_statementContext ctx) {
+
+    }
+
+    @Override
     public void enterPrint(FParser.PrintContext ctx) {
 
     }
@@ -316,27 +316,33 @@ public class FTreeListener implements FListener {
     }
 
     @Override
-    public void enterAssignment_or_call(FParser.Assignment_or_callContext ctx) {
+    public void enterAssignment(FParser.AssignmentContext ctx) {
 
     }
 
     @Override
-    public void exitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
-//        String full = ctx.getText();
-//        if (full != null) {
-//            String identName = ctx.identifier().getText();
-//            int i = identName.length();
-//            String expression = ctx.tail().getText();
-//            int amount = 0;
-//            if (expression.charAt(0) == '(' && expression.charAt(expression.length()-1) == ')') {
-//                amount = expression.split(",").length;
-//            }
-//            if (expression.matches("\\(\\s*\\)")) amount = 0;
-//            if (amount != functionArgs.get(identName)) {
-//                result.append(String.format("Illegal function call, function : {} requires {} param ",
-//                        identName, amount));
-//            }
-//        }
+    public void exitAssignment(FParser.AssignmentContext ctx) {
+
+    }
+
+    @Override
+    public void enterAssign_right_part(FParser.Assign_right_partContext ctx) {
+
+    }
+
+    @Override
+    public void exitAssign_right_part(FParser.Assign_right_partContext ctx) {
+
+    }
+
+    @Override
+    public void enterFunction_call(FParser.Function_callContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunction_call(FParser.Function_callContext ctx) {
+
     }
 
     @Override
