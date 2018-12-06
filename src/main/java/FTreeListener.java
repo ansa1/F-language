@@ -11,13 +11,10 @@ public class FTreeListener implements FListener {
 
     public FTreeListener() {
         result = new StringBuilder();
-        functionArgs = new HashMap<>();
     }
 
     Stack<HashMap<String, String>> stack = new Stack<>();
     StringBuilder result;
-
-    private static HashMap<String, Integer> functionArgs;
 
     private void initStack() {
         if (stack.isEmpty()) {
@@ -53,31 +50,9 @@ public class FTreeListener implements FListener {
 
     }
 
-    private int calculateParams(String expression) {
-        int amount = 0;
-        if (expression.length() > 6 && expression.substring(0, 4).equals("func")) {
-            if (expression.substring(4, 6).equals("()"))
-                return amount;
-            else {
-                int i = 4;
-                while (expression.charAt(i) != ')') {
-                    if (expression.charAt(i) == ':')
-                        amount++;
-                    i++;
-                }
-                return amount;
-            }
-        }
-        return -1;
-    }
-
     @Override
     public void exitDeclaration(FParser.DeclarationContext ctx) {
-//        int k = calculateParams(ctx.expression().getText());
-//        if (k != -1) {
-//            System.out.println(ctx.identifier().getText());
-//            functionArgs.put(ctx.identifier().getText(), k);
-//        }
+
     }
 
     @Override
@@ -327,6 +302,16 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitStatement(FParser.StatementContext ctx) {
+
+    }
+
+    @Override
+    public void enterPrint(FParser.PrintContext ctx) {
+
+    }
+
+    @Override
+    public void exitPrint(FParser.PrintContext ctx) {
 
     }
 

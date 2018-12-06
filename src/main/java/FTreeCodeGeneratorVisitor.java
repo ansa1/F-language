@@ -453,6 +453,15 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     }
 
     @Override
+    public Value visitPrint(FParser.PrintContext ctx) {
+        System.out.println(ctx.expression(0).getText());
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            System.out.print(this.visit(ctx.expression(i)) + " ");
+        }
+        return null;
+    }
+
+    @Override
     public Value visitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
         //TODO func call
         for(int i = 0; i < stack.size(); i++){
@@ -470,7 +479,14 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitConditional(FParser.ConditionalContext ctx) {
-        return visitChildren(ctx);
+        Boolean condition = this.visit(ctx.expression()).asBoolean();
+        if (condition) {
+            return this.visit(ctx.then_statement());
+        } else {
+            if (ctx.else_statement() != null)
+                return this.visit(ctx.else_statement());
+        }
+        return null;
     }
 
     @Override
@@ -494,11 +510,29 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFor_loop(FParser.For_loopContext ctx) {
+        Value start;
+        Value end;
+        if (ctx.expression(1) != null)
+        {
+            start = this.visit(ctx.expression(0));
+            end = this.visit(ctx.expression(1));
+        } else {
+            start = new Value(0);
+            end = this.visit(ctx.expression(0));
+        }
+        for (int i = start.asInteger(); i < end.asInteger(); i++) {
+            visitChildren(ctx);
+        }
         return null;
     }
 
     @Override
     public Value visitWhile_loop(FParser.While_loopContext ctx) {
+        Boolean condition = this.visit(ctx.expression()).asBoolean();
+        while (condition) {
+            visitChildren(ctx);
+            condition = this.visit(ctx.expression()).asBoolean();
+        }
         return null;
     }
 

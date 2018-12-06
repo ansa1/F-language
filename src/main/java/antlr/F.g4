@@ -150,7 +150,14 @@ statement
     | 'return' (expression)?
     | 'break'
     | declaration
+    | print
 ;
+
+print
+:
+    'print' (expression (',' expression)*)?
+;
+
 assignment_or_call
 :
     identifier (tail)? (':=' expression)?
