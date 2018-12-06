@@ -1,5 +1,10 @@
 a is func() do
     j is 0;
+    if j = 0 then
+        j := 1
+    else
+        j := 2
+    end;
     while j < 10 loop
         j := j + 1
     end;

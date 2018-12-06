@@ -460,7 +460,14 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitConditional(FParser.ConditionalContext ctx) {
-        return visitChildren(ctx);
+        Boolean condition = this.visit(ctx.expression()).asBoolean();
+        if (condition) {
+            return this.visit(ctx.then_statement());
+        } else {
+            if (ctx.else_statement() != null)
+                return this.visit(ctx.else_statement());
+        }
+        return null;
     }
 
     @Override
