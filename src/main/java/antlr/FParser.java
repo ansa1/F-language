@@ -1366,8 +1366,8 @@ public class FParser extends Parser {
 		public Body_endContext body_end() {
 			return getRuleContext(Body_endContext.class,0);
 		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public StatementContext statement() {
+			return getRuleContext(StatementContext.class,0);
 		}
 		public BodyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1415,7 +1415,7 @@ public class FParser extends Parser {
 				setState(219);
 				match(T__23);
 				setState(220);
-				expression();
+				statement();
 				}
 				}
 				break;
@@ -2116,7 +2116,6 @@ public class FParser extends Parser {
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 54, RULE_statement);
-		int _la;
 		try {
 			setState(327);
 			_errHandler.sync(this);
@@ -2149,14 +2148,14 @@ public class FParser extends Parser {
 				match(T__35);
 				setState(322);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__14) | (1L << T__17) | (1L << T__19) | (1L << T__22) | (1L << T__26) | (1L << T__47) | (1L << T__48) | (1L << T__49) | (1L << T__50) | (1L << INTEGER) | (1L << COMPLEX) | (1L << REAL) | (1L << IdentifierName))) != 0)) {
+				switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
+				case 1:
 					{
 					setState(321);
 					expression();
 					}
+					break;
 				}
-
 				}
 				break;
 			case 5:
@@ -2222,38 +2221,40 @@ public class FParser extends Parser {
 	public final PrintContext print() throws RecognitionException {
 		PrintContext _localctx = new PrintContext(_ctx, getState());
 		enterRule(_localctx, 56, RULE_print);
-		int _la;
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(329);
 			match(T__37);
 			setState(338);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__13) | (1L << T__14) | (1L << T__17) | (1L << T__19) | (1L << T__22) | (1L << T__26) | (1L << T__47) | (1L << T__48) | (1L << T__49) | (1L << T__50) | (1L << INTEGER) | (1L << COMPLEX) | (1L << REAL) | (1L << IdentifierName))) != 0)) {
+			switch ( getInterpreter().adaptivePredict(_input,33,_ctx) ) {
+			case 1:
 				{
 				setState(330);
 				expression();
 				setState(335);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==T__3) {
-					{
-					{
-					setState(331);
-					match(T__3);
-					setState(332);
-					expression();
-					}
+				_alt = getInterpreter().adaptivePredict(_input,32,_ctx);
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(331);
+						match(T__3);
+						setState(332);
+						expression();
+						}
+						} 
 					}
 					setState(337);
 					_errHandler.sync(this);
-					_la = _input.LA(1);
+					_alt = getInterpreter().adaptivePredict(_input,32,_ctx);
 				}
 				}
+				break;
 			}
-
 			}
 		}
 		catch (RecognitionException re) {
@@ -2307,14 +2308,14 @@ public class FParser extends Parser {
 			identifier();
 			setState(342);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__17) | (1L << T__19) | (1L << T__21))) != 0)) {
+			switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
+			case 1:
 				{
 				setState(341);
 				tail();
 				}
+				break;
 			}
-
 			setState(346);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -3195,7 +3196,7 @@ public class FParser extends Parser {
 		"\u00d5\5 \21\2\u00d4\u00d2\3\2\2\2\u00d5\u00d8\3\2\2\2\u00d6\u00d4\3\2"+
 		"\2\2\u00d6\u00d7\3\2\2\2\u00d7#\3\2\2\2\u00d8\u00d6\3\2\2\2\u00d9\u00da"+
 		"\5&\24\2\u00da\u00db\5\66\34\2\u00db\u00dc\5(\25\2\u00dc\u00e0\3\2\2\2"+
-		"\u00dd\u00de\7\32\2\2\u00de\u00e0\5\n\6\2\u00df\u00d9\3\2\2\2\u00df\u00dd"+
+		"\u00dd\u00de\7\32\2\2\u00de\u00e0\58\35\2\u00df\u00d9\3\2\2\2\u00df\u00dd"+
 		"\3\2\2\2\u00e0%\3\2\2\2\u00e1\u00e2\7\33\2\2\u00e2\'\3\2\2\2\u00e3\u00e4"+
 		"\7\34\2\2\u00e4)\3\2\2\2\u00e5\u00e6\7\24\2\2\u00e6\u00eb\5,\27\2\u00e7"+
 		"\u00e8\7\6\2\2\u00e8\u00ea\5,\27\2\u00e9\u00e7\3\2\2\2\u00ea\u00ed\3\2"+
