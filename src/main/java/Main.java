@@ -11,6 +11,7 @@ public class Main {
             CSyntaxAnalyzer cSyntaxAnalyzer = new CSyntaxAnalyzer();
             ParseTree AST = cSyntaxAnalyzer.analyze("./in.txt");
             FTreeCodeGeneratorVisitor visitor = new FTreeCodeGeneratorVisitor();
+            FTreeListener listener = new FTreeListener();
             visitor.visit(AST);
             cSyntaxAnalyzer.serializeTree("./out.txt");
         } catch (Exception err) {

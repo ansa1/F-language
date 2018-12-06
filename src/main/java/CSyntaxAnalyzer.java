@@ -52,8 +52,12 @@ public class CSyntaxAnalyzer {
         parser.addParseListener(listener);
         // Entry point
         this.AST = parser.translationunit();
-        System.out.println(listener.getResult());
-        return AST;
+        if (listener.getResult().equals("")) ;
+        else {
+            System.out.println(listener.getResult());
+            return AST;
+        }
+        return null;
     }
 
     // write AST tree as JSON to output

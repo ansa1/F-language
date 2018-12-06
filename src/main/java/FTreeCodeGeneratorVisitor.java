@@ -454,10 +454,10 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitPrint(FParser.PrintContext ctx) {
-        System.out.println(ctx.expression(0).getText());
         for (int i = 0; i < ctx.expression().size(); i++) {
-            System.out.print(this.visit(ctx.expression(i)) + " ");
+            System.out.print(this.visit(ctx.expression(i)).value + " ");
         }
+        System.out.println();
         return null;
     }
 
