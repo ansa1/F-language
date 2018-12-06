@@ -214,6 +214,11 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     }
 
     @Override
+    public Value visitFunc_begin(FParser.Func_beginContext ctx) {
+        return null;
+    }
+
+    @Override
     public Value visitFun_declaration(FParser.Fun_declarationContext ctx) {
         return visitChildren(ctx);
     }
@@ -304,17 +309,17 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     }
 
     @Override
+    public Value visitFor_loop(FParser.For_loopContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Value visitWhile_loop(FParser.While_loopContext ctx) {
+        return null;
+    }
+
+    @Override
     public Value visitLoop_body(FParser.Loop_bodyContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Value visitLoop_body_start(FParser.Loop_body_startContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public Value visitLoop_body_end(FParser.Loop_body_endContext ctx) {
         return visitChildren(ctx);
     }
 

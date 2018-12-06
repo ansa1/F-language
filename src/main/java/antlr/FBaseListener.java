@@ -1,4 +1,4 @@
-// Generated from C:/Users/Petr/Documents/c_syntax_analyzer/src/main/java/antlr\F.g4 by ANTLR 4.7
+// Generated from /Users/satellite/Code/Java/comicon/projectf/src/main/java/antlr/F.g4 by ANTLR 4.7
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -179,6 +179,18 @@ public class FBaseListener implements FListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunction(FParser.FunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunc_begin(FParser.Func_beginContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunc_begin(FParser.Func_beginContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -400,6 +412,30 @@ public class FBaseListener implements FListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFor_loop(FParser.For_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFor_loop(FParser.For_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhile_loop(FParser.While_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhile_loop(FParser.While_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLoop_body(FParser.Loop_bodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -407,30 +443,6 @@ public class FBaseListener implements FListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLoop_body(FParser.Loop_bodyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_body_start(FParser.Loop_body_startContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_body_start(FParser.Loop_body_startContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLoop_body_end(FParser.Loop_body_endContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLoop_body_end(FParser.Loop_body_endContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
