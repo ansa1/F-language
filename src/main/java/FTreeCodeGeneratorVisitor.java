@@ -97,10 +97,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     }
                 case "<=":
                     if (left.isDouble() && right.isDouble()) {
-                        System.out.println(1);
                         return new Value(left.asDouble() <= right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
-                        System.out.println(2);
                         System.out.println("start"+left+"end");
                         System.out.println(right.asInteger());
                         System.out.println(left.asInteger() <= right.asInteger());
@@ -109,24 +107,16 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         System.out.println("success");
                         return value;
                     } else if (left.isInteger() && right.isDouble()) {
-                        System.out.println(3);
                         return new Value(Double.valueOf(left.asInteger()) <= right.asDouble());
                     } else if (left.isDouble() && right.isInteger()) {
-                        System.out.println(4);
                         return new Value(left.asDouble() <= Double.valueOf(right.asInteger()));
                     } else if (left.isRational() && right.isRational()) {
-                        System.out.println(5);
                         return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) <= (right.asRational().getNumerator() * left.asRational().getDenominator()));
                     } else if (left.isInteger() && right.isRational()) {
-                        System.out.println(6);
                         return new Value((left.asInteger() * right.asRational().getDenominator()) <= right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
-                        System.out.println(7);
-
                         return new Value(left.asRational().getNumerator() <= (right.asInteger() * left.asRational().getDenominator()));
                     } else {
-                        System.out.println(8);
-
                         throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case ">":
