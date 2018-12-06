@@ -95,6 +95,12 @@ public interface FVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunction(FParser.FunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link FParser#parameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameters(FParser.ParametersContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link FParser#func_begin}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

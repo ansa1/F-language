@@ -32,22 +32,24 @@ public class Value {
         return String.valueOf(value);
     }
 
-    public boolean isBoolean() { return value instanceof Boolean; }
+    public boolean isBoolean() {
+        return value.toString().matches("true|false");
+    }
 
     public boolean isDouble() {
-        return value instanceof Double;
+        return value.toString().matches("[0-9]+\\.[0-9]+");
     }
 
     public boolean isInteger() {
-        return value instanceof Integer;
+        return value.toString().matches("[0-9]+");
     }
 
     public boolean isRational() {
-        return value instanceof Rational;
+        return value.toString().matches("[0-9]+\\\\[0-9]+");
     }
 
     public boolean isComplex() {
-        return value instanceof Complex;
+        return value.toString().matches("[0-9]+(\\.[0-9]+)?i[0-9]+(\\.[0-9]+)?");
     }
 
     @Override

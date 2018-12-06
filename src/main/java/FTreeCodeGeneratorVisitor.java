@@ -378,8 +378,17 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunction(FParser.FunctionContext ctx) {
+        Value result = visitChildren(ctx);
+        return result;
+    }
 
-        return visitChildren(ctx);
+    @Override
+    public Value visitParameters(FParser.ParametersContext ctx) {
+        for (int i = 0; i < ctx.fun_declaration().size(); i++) {
+            String fun_param = ctx.fun_declaration(i).identifier().getText();
+            stack.peek().put(fun_param, new Value(0));
+        }
+        return null;
     }
 
     private void addLayer() {
@@ -394,13 +403,13 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFun_declaration(FParser.Fun_declarationContext ctx) {
-        stack.peek().put(ctx.identifier().getText(), new Value(0));
         return null;
     }
 
     @Override
     public Value visitBody(FParser.BodyContext ctx) {
-        return visitChildren(ctx);
+        Value result = this.visit(ctx.statements());
+        return result;
     }
 
     @Override
@@ -447,13 +456,14 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     @Override
     public Value visitStatements(FParser.StatementsContext ctx) {
         Value result = new Value(0);
+        Value returnResult = null;
         for (int i = 0; i < ctx.statement().size(); i++) {
             if (ctx.statement(i).return_statement() != null) {
-                result = visit(ctx.statement(i));
-            }
+                returnResult = visit(ctx.statement(i));
+            } else
             result = visit(ctx.statement(i));
         }
-        return result;
+        return (returnResult == null) ? result : returnResult;
     }
 
     @Override
@@ -483,7 +493,6 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
             HashMap<String, Value> tmp = stack.get(i);
             if(tmp.containsKey(ctx.identifier().getText())) {
                 Value old = tmp.get(ctx.identifier().getText());
-                System.out.println("!!!" + newV);
                 if((old.isBoolean() && !newV.isBoolean()) || (old.isComplex() && !newV.isComplex()) || (old.isDouble() && !newV.isDouble()) || (old.isInteger() && !newV.isInteger()) || (old.isRational() && !newV.isRational()))
                     throw new RuntimeException("types mismatch in " + ctx.getText());
                 tmp.replace(ctx.identifier().getText(), newV);
@@ -494,21 +503,15 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitAssign_right_part(FParser.Assign_right_partContext ctx) {
-        System.out.println(ctx.getText());
         return visitChildren(ctx);
     }
 
     @Override
     public Value visitFunction_call(FParser.Function_callContext ctx) {
-        System.out.println("FUNC" + ctx.getText());
-        System.out.println(ctx.identifier().getText());
         for(int i = 0; i < stackFun.size(); i++) {
             HashMap<String, FParser.ExpressionContext> tmp = stackFun.get(i);
-            System.out.println(tmp.keySet());
             if(tmp.containsKey(ctx.identifier().getText())) {
-                System.out.println(tmp.get(ctx.identifier().getText()).getText());
                 Value val = visit(tmp.get(ctx.identifier().getText()));
-                System.out.println("!!" + val.toString());
                 return val;
             }
         }

@@ -115,6 +115,13 @@ public class FBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitParameters(FParser.ParametersContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitFunc_begin(FParser.Func_beginContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

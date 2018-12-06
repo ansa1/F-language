@@ -71,7 +71,12 @@ elementary
 ;
 function
 :
-    func_begin '(' fun_declaration* ')'  (':' type)? body
+    func_begin '(' parameters? ')'  (':' type)? body
+;
+
+parameters
+:
+    fun_declaration (',' fun_declaration)*
 ;
 
 func_begin
