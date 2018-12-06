@@ -1,13 +1,14 @@
 a is func(k: integer) do
+    print k;
     if 1 < 2 then
-        return 2
+        return 3
     else
-        return 11
+        return 4
     end
 end;
 
 main is func() do
-    a(2);
+    a(200);
     d is 0;
     d := a();
     print d

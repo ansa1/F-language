@@ -13,8 +13,8 @@ public class Main {
             String result = cSyntaxAnalyzer.result;
             FTreeCodeGeneratorVisitor visitor = new FTreeCodeGeneratorVisitor();
             visitor.visit(AST);
+            cSyntaxAnalyzer.serializeTree("./out.txt");
 //            if (result.equals("")) {
-//                cSyntaxAnalyzer.serializeTree("./out.txt");
 //                JarCreator.run();
 //            } else {
 //                System.out.println(result);
