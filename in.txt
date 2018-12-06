@@ -1,28 +1,4 @@
-j: bool is false;
-a is func(p:integer): bool do
-    macro is func(k:integer, j:bool) : integer => func(param: bool) => false;
-    j:bool is macro(123, false);
-    info is (name is 'John', age is 13);
-    asdsad is 123;
-    dasdas is 214;
-    arr is [1, 2, 3, 4, asdsad];
-    mapa is {"1" : asdsad, "2" : dasdas};
-    k: integer is 0;
-    j is func(d: real) => d + 2;
-    k := 1 + 2;
-    for qwe in 10 loop
-        k := 1;
-        l is 0
-    end;
-    if k < 4 then
-        a();
-        l is 12
-    else
-        l is 14
-    end
-end;
-b is func(a: integer, b:bool): integer do
-    for iterator in 1..10 loop
-        a()
-    end
+a is func() do
+    i: complex is 1i2;
+    i := 3i13 * 7i17
 end
