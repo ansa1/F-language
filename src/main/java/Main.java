@@ -19,7 +19,8 @@ public class Main {
             }
         } catch (Exception err) {
             // Else there are errors, which program writes to console
-            System.out.println("An error occured while performing syntax analysis. Please see log.txt");
+            System.out.println("An error occured while syntax analysis:");
+            System.out.println(err);
             try (PrintWriter out = new PrintWriter("log.txt")) {
                 out.println(err);
             } catch (FileNotFoundException e) {

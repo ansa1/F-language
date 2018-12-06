@@ -1,1 +1,1 @@
-org.antlr.v4.runtime.misc.ParseCancellationException: line 27:4 mismatched input 'print' expecting {';', 'and', 'or', 'xor', '<', '<=', '>', '>=', '=', '/=', '+', '-', '*', '/', '(', '[', '.', 'end'}
+org.antlr.v4.runtime.misc.ParseCancellationException: line 21:3 mismatched input 'end' expecting {'return', 'break', 'print', 'if', 'for', 'while', IdentifierName}

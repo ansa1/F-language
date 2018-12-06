@@ -4,7 +4,7 @@ public class Rational {
 
     @Override
     public String toString() {
-        return numerator + "i" + denominator;
+        return numerator + "\\" + denominator;
     }
 
     public Rational(Integer numerator, Integer denominator) {

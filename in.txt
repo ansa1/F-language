@@ -1,27 +1,21 @@
-a is func() do
-    j is 0;
-    print j;
-    if j = 0 then
-        j := 1
-    else
-        j := 2
-    end;
-    while j < 10 loop
-        j := j + 1;
-        print j
-    end;
-    i: complex is 1i2;
-    i := 3i13 * 7i17
+b is func() do
+    print 3
 end;
 
-b is func(p: integer, l: bool) : integer do
-    i: integer is 0;
-    i := 1 + 2
+a is func() do
+    k: integer is 0;
+    j is func() => print k;
+    j();
+    b()
 end;
+
 
 c is func() do
     m is b(1, false)
 end;
+
 main is func() do
-    print 3
+   a: integer is 9;
+   b is 3;
+   print a+b
    end
