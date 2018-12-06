@@ -1,1 +1,1 @@
-java.io.FileNotFoundException: .\src\main\java\antlr4-4.7.1.jar (Не удается найти указанный файл)
+org.antlr.v4.runtime.misc.ParseCancellationException: line 27:4 mismatched input 'print' expecting {';', 'and', 'or', 'xor', '<', '<=', '>', '>=', '=', '/=', '+', '-', '*', '/', '(', '[', '.', 'end'}
