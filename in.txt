@@ -21,4 +21,7 @@ end;
 
 c is func() do
     m is b(1, false)
-end
+end;
+main is func() do
+    print 3
+   end

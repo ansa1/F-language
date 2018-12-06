@@ -31,6 +31,7 @@ public class JarCreator {
 
 
         String file17ToCompile = "./src/main/java/ThrowingErrorListener.java";
+        String file18ToCompile = "./src/main/java/FTreeListener.java";
 
 
 
@@ -39,7 +40,7 @@ public class JarCreator {
         int compilationResult = compiler.run(null, null, null,
                 file1ToCompile, file2ToCompile, file3ToCompile, file4ToCompile, file5ToCompile, file6ToCompile,
                 file7ToCompile, file8ToCompile, file9ToCompile, file10ToCompile, file11ToCompile, file12ToCompile,
-                file13ToCompile, file17ToCompile
+                file13ToCompile, file17ToCompile, file18ToCompile
         );
 
         if (compilationResult == 0) {
@@ -80,6 +81,7 @@ public class JarCreator {
         add(new File("./src/main/java/antlr-runtime-3.5.2.jar"), target);
 
         add(new File("./src/main/java/ThrowingErrorListener.class"), target);
+        add(new File("./src/main/java/FTreeListener.class"), target);
 
         target.close();
     }
