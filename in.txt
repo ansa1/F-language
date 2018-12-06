@@ -1,5 +1,13 @@
 a is func() do
-    x is 2;
-    y is 3;
-    x := 4 + y
+    i: complex is 1i2;
+    i := 3i13 * 7i17
+end;
+
+b is func(p: integer, l: bool) : integer do
+    i: integer is 0;
+    i := 1 + 2
+end;
+
+c is func() do
+    m is b(1, false)
 end

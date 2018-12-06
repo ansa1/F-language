@@ -3,6 +3,7 @@ import antlr.FVisitor;
 import org.antlr.v4.runtime.tree.*;
 
 import java.math.BigInteger;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -11,7 +12,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     public static final double SMALL_VALUE = 0.00000000001;
 
-    Stack<HashMap<String, String>> stack = new Stack<>();
+    Stack<HashMap<String, Value>> stack = new Stack<>();
 
     private void initStack() {
         if (stack.isEmpty()) {
@@ -32,6 +33,12 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitDeclaration(FParser.DeclarationContext ctx) {
+        if(ctx.expression().getText().contains("func")) {
+            //TODO func
+        }
+        else {
+            stack.peek().put(ctx.identifier().getText(), this.visit(ctx.expression()));
+        }
         return visitChildren(ctx);
     }
 
@@ -66,6 +73,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) < right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() < (right.asInteger() * left.asRational().getDenominator()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case "<=":
                     if (left.isDouble() && right.isDouble()) {
@@ -82,7 +91,9 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) <= right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() <= (right.asInteger() * left.asRational().getDenominator()));
-                    };
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
+                    }
                 case ">":
                     if (left.isDouble() && right.isDouble()) {
                         return new Value(left.asDouble() > right.asDouble());
@@ -98,6 +109,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) > right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() > (right.asInteger() * left.asRational().getDenominator()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case ">=":
                     if (left.isDouble() && right.isDouble()) {
@@ -114,6 +127,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) >= right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() >= (right.asInteger() * left.asRational().getDenominator()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case "=":
                     if (left.isDouble() && right.isDouble()) {
@@ -130,6 +145,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) == right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() == (right.asInteger() * left.asRational().getDenominator()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case "/=":
                     if (left.isDouble() && right.isDouble()) {
@@ -146,6 +163,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value((left.asInteger() * right.asRational().getDenominator()) != right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
                         return new Value(left.asRational().getNumerator() != (right.asInteger() * left.asRational().getDenominator()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 default:
                     throw new RuntimeException("unknown operator: " + ctx.op.getText());
@@ -159,7 +178,6 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
         if (ctx.op != null) {
             Value left = this.visit(ctx.left);
             Value right = this.visit(ctx.right);
-
             switch (ctx.op.getText()) {
                 case "+":
                     if (left.isDouble() && right.isDouble()) {
@@ -169,6 +187,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     } else if (left.isInteger() && right.isDouble()) {
                         return new Value(left.asInteger() + right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
+                        System.out.println(left.asInteger() + right.asInteger());
                         return new Value(left.asInteger() + right.asInteger());
                     } else if (left.isRational() && right.isRational()) {
                         return new Value(Utils.rational_sum(left.asRational(), right.asRational()));
@@ -186,6 +205,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value(Utils.complex_sum(left.asDouble(), right.asComplex()));
                     } else if (left.isComplex() && right.isDouble()) {
                         return new Value(Utils.complex_sum(left.asComplex(), right.asDouble()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case "-":
                     if (left.isDouble() && right.isDouble()) {
@@ -212,6 +233,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value(Utils.complex_sub(left.asDouble(), right.asComplex())); //.0000000003
                     } else if (left.isComplex() && right.isDouble()) {
                         return new Value(Utils.complex_sub(left.asComplex(), right.asDouble()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 default:
                     throw new RuntimeException("unknown operator: " + ctx.op.getText());
@@ -251,6 +274,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value(Utils.complex_mult(left.asDouble(), right.asComplex()));
                     } else if (left.isComplex() && right.isDouble()) {
                         return new Value(Utils.complex_mult(left.asComplex(), right.asDouble()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case "/":
                     if (left.isDouble() && right.isDouble()) {
@@ -273,6 +298,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value(Utils.complex_div(left.asComplex(), right.asInteger()));
                     } else if (left.isComplex() && right.isDouble()) {
                         return new Value(Utils.complex_div(left.asComplex(), right.asDouble()));
+                    } else {
+                        throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 default:
                     throw new RuntimeException("unknown operator: " + ctx.op.getText());
@@ -345,6 +372,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunc_begin(FParser.Func_beginContext ctx) {
+        stack.push(new HashMap<>());
         return null;
     }
 
@@ -370,6 +398,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitBody_end(FParser.Body_endContext ctx) {
+        stack.pop();
         return visitChildren(ctx);
     }
 
@@ -415,7 +444,18 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
-        return visitChildren(ctx);
+        //TODO func call
+        for(int i = 0; i < stack.size(); i++){
+            HashMap<String, Value> tmp = stack.get(i);
+            if(tmp.containsKey(ctx.identifier().getText())) {
+                Value old = tmp.get(ctx.identifier().getText());
+                Value newV = this.visit(ctx.expression());
+                if((old.isBoolean() && !newV.isBoolean()) || (old.isComplex() && !newV.isComplex()) || (old.isDouble() && !newV.isDouble()) || (old.isInteger() && !newV.isInteger()) || (old.isRational() && !newV.isRational()))
+                    throw new RuntimeException("types mismatch in " + ctx.getText());
+                tmp.replace(ctx.identifier().getText(), newV);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -425,16 +465,20 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitThen_statement(FParser.Then_statementContext ctx) {
+        stack.push(new HashMap<>());
         return visitChildren(ctx);
     }
 
     @Override
     public Value visitElse_statement(FParser.Else_statementContext ctx) {
+        stack.pop();
+        stack.push(new HashMap<>());
         return visitChildren(ctx);
     }
 
     @Override
     public Value visitLoop(FParser.LoopContext ctx) {
+        stack.push(new HashMap<>());
         return visitChildren(ctx);
     }
 
@@ -487,6 +531,12 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitIdentifier(FParser.IdentifierContext ctx) {
+        for(int i = 0; i < stack.size(); i++){
+            HashMap<String, Value> tmp = stack.get(i);
+            if(tmp.containsKey(ctx.getText())) {
+                return tmp.get(ctx.getText());
+            }
+        }
         return visitChildren(ctx);
     }
 }

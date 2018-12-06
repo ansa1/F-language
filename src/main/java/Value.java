@@ -32,6 +32,8 @@ public class Value {
         return String.valueOf(value);
     }
 
+    public boolean isBoolean() { return value instanceof Boolean; }
+
     public boolean isDouble() {
         return value instanceof Double;
     }
