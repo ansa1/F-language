@@ -36,6 +36,8 @@ public class CSyntaxAnalyzer {
         initInput(inputPath);
     }
 
+    public String result = "";
+
     // start program and read `in.txt` file, then save AST
     public ParseTree analyze(String inputPath) {
         initInput(inputPath);
@@ -52,7 +54,7 @@ public class CSyntaxAnalyzer {
         parser.addParseListener(listener);
         // Entry point
         this.AST = parser.translationunit();
-        System.out.println(listener.getResult());
+        this.result = listener.getResult();
         return AST;
     }
 

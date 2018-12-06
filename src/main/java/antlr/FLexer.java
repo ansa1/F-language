@@ -1,4 +1,4 @@
-// Generated from C:/Users/ansat/Documents/F-language/src/main/java/antlr\F.g4 by ANTLR 4.7
+// Generated from C:/Users/Petr/Documents/c_syntax_analyzer/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

@@ -1,4 +1,4 @@
-// Generated from C:/Users/ansat/Documents/F-language/src/main/java/antlr\F.g4 by ANTLR 4.7
+// Generated from C:/Users/Petr/Documents/c_syntax_analyzer/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -553,7 +553,7 @@ public class FParser extends Parser {
 			setState(132);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -632,7 +632,7 @@ public class FParser extends Parser {
 			setState(140);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
@@ -2928,7 +2928,7 @@ public class FParser extends Parser {
 					setState(397); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
-				} while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+				} while ( _alt!=1 && _alt!= ATN.INVALID_ALT_NUMBER );
 				setState(399);
 				match(T__49);
 				}
@@ -2957,7 +2957,7 @@ public class FParser extends Parser {
 					setState(404); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,41,_ctx);
-				} while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+				} while ( _alt!=1 && _alt!= ATN.INVALID_ALT_NUMBER );
 				setState(406);
 				match(T__50);
 				}

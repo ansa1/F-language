@@ -1,36 +1,24 @@
-main is func() do
-    a is 12;
-    b is 14.34;
-    if a < b then
-        print("less")
+a is func() do
+    j is 0;
+    print j;
+    if j = 0 then
+        j := 1
     else
-        print("more or equal")
-    end
-end
+        j := 2
+    end;
+    while j < 10 loop
+        j := j + 1;
+        print j
+    end;
+    i: complex is 1i2;
+    i := 3i13 * 7i17
+end;
 
-main is func() do
-    a is 1
-    while a < 10 loop
-        a := a + 1
-    end
-end
+b is func(p: integer, l: bool) : integer do
+    i: integer is 0;
+    i := 1 + 2
+end;
 
-main is func() do
-    a: complex is 13i-4;
-    b: complex is 4i3;
-    c: real is 3.75;
-    print(a*b);
-    print(a/b);
-    print(b*c);
-end
-
-main is func() do
-    arr is [1, 2, 3];
-    arr := arr + 12;
-    a is arr[3]
-end
-
-main is func() do
-    tuple is (position is "seller", salary is 50000, "John Doe");
-    print(tuple.3)
+c is func() do
+    m is b(1, false)
 end
