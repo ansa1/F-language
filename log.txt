@@ -1,1 +1,1 @@
-java.lang.NullPointerException
+java.lang.RuntimeException: bad types of: n and 3

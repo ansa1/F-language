@@ -1,11 +1,23 @@
 fib is func(n: integer) do
-    if n <= 3 then
-        print 2
-    else
-        print n
-    end
+    if n < 3 then
+        print "here";
+        return 1
+    end;
+        print "huy";
+        prev1 is 0;
+        prev2 is 0;
+        i is n - 2;
+        j is n - 1;
+        prev1 := fib(i);
+        print prev1;
+        prev2 := fin(j);
+        print prev2;
+        prev1 := prev1 + prev2;
+        return prev1
 end;
 
 main is func() do
-    fib(5)
+    a is 0;
+    a := fib(5);
+    print a
 end

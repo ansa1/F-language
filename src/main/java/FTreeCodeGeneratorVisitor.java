@@ -99,13 +99,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     if (left.isDouble() && right.isDouble()) {
                         return new Value(left.asDouble() <= right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
-                        System.out.println("start"+left+"end");
-                        System.out.println(right.asInteger());
-                        System.out.println(left.asInteger() <= right.asInteger());
-                        System.out.println("asfagawfwa");
-                        Value value = new Value(left.asInteger() <= right.asInteger());
-                        System.out.println("success");
-                        return value;
+                        return new Value(left.asInteger() <= right.asInteger());
                     } else if (left.isInteger() && right.isDouble()) {
                         return new Value(Double.valueOf(left.asInteger()) <= right.asDouble());
                     } else if (left.isDouble() && right.isInteger()) {
@@ -402,9 +396,10 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 //        System.out.println("-----------------");
         for (int i = 0; i < ctx.fun_declaration().size(); i++) {
             String fun_param = ctx.fun_declaration(i).identifier().getText();
-            if (!params.isEmpty()){
-//                System.out.println("VARIABLES " +  params.peek().get(i));
+            if (!params.isEmpty()) {
+                System.out.println("PARAMS " + params.peek().get(i));
                 stack.peek().put(fun_param, params.peek().get(i));
+                stack.peek().replace(fun_param, params.peek().get(i));
             }
         }
         return null;
@@ -489,12 +484,14 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
         Value result = new Value(0);
         Value returnResult = null;
         for (int i = 0; i < ctx.statement().size(); i++) {
-            if (ctx.statement(i).return_statement() != null) {
+            if (ctx.statement(i).getText().matches("^return.*$")) {
+                System.out.println("ALERT " + ctx.statement(i).getText());
                 returnResult = visit(ctx.statement(i));
+                return returnResult;
             } else
                 result = visit(ctx.statement(i));
         }
-        return (returnResult == null) ? result : returnResult;
+        return null;
     }
 
     @Override
@@ -550,13 +547,17 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                 ArrayList<Value> params_values = new ArrayList<>();
 
                 for (int j = 0; j < ctx.expression().size(); j++) {
-                    params_values.add(new Value(ctx.expression(i).getText()));
+                    params_values.add(visit(ctx.expression(i)));
                     params_keys.add(new Value("k"));
                 }
 
-                initStackParams();
+//                initStackParams();
+                if (!params.empty()) {
+                    System.out.println("etfawgawg");
+//                    params.pop();
+                }
                 params.push(params_values);
-
+                System.out.println(params.peek());
                 Value val = visit(tmp.get(ctx.identifier().getText()));
                 return val;
             }
@@ -584,8 +585,8 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitElse_statement(FParser.Else_statementContext ctx) {
-        stack.pop();
-        stack.push(new HashMap<>());
+//        stack.pop();
+//        stack.push(new HashMap<>());
         return visitChildren(ctx);
     }
 
@@ -661,7 +662,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitIdentifier(FParser.IdentifierContext ctx) {
-        for (int i = 0; i < stack.size(); i++) {
+        for (int i = stack.size() - 1; i >= 0; i--) {
             HashMap<String, Value> tmp = stack.get(i);
             if (tmp.containsKey(ctx.getText())) {
                 return tmp.get(ctx.getText());
