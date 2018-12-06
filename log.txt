@@ -1,1 +1,1 @@
-org.antlr.v4.runtime.misc.ParseCancellationException: line 8:4 mismatched input 'while' expecting {';', 'and', 'or', 'xor', '<', '<=', '>', '>=', '=', '/=', '+', '-', '*', '/', '(', '[', '.', 'end'}
+java.lang.NullPointerException

@@ -187,7 +187,6 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     } else if (left.isInteger() && right.isDouble()) {
                         return new Value(left.asInteger() + right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
-                        System.out.println(left.asInteger() + right.asInteger());
                         return new Value(left.asInteger() + right.asInteger());
                     } else if (left.isRational() && right.isRational()) {
                         return new Value(Utils.rational_sum(left.asRational(), right.asRational()));
@@ -444,6 +443,10 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitPrint(FParser.PrintContext ctx) {
+        System.out.println(ctx.expression(0).getText());
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            System.out.print(this.visit(ctx.expression(i)) + " ");
+        }
         return null;
     }
 
