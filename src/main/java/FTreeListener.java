@@ -494,8 +494,9 @@ public class FTreeListener implements FListener {
 
     @Override
     public void exitIdentifier(FParser.IdentifierContext ctx) {
-        if (ctx.getParent().getClass().getName().matches("(^.*Declaration.*$)|(^.*declaration.*$)"))
+        if (ctx.getParent().getClass().getName().matches("(^.*Declaration.*$)|(^.*declaration.*$)")) {
             stack.peek().put(ctx.IdentifierName().getText(), "");
+        }
         if (ctx.getParent().getClass().getName().matches("^.*For_loop.*$")) {
             stack.peek().put(ctx.IdentifierName().getText(), "");
         }

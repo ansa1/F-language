@@ -1,7 +1,7 @@
-a is func(p:integer) do
+j: bool is false;
+a is func(p:integer): bool do
     macro is func(k:integer, j:bool) : integer => func(param: bool) => false;
     j:bool is macro(123, false);
-    k is 1i3;
     info is (name is 'John', age is 13);
     asdsad is 123;
     dasdas is 214;
@@ -21,7 +21,7 @@ a is func(p:integer) do
         l is 14
     end
 end;
-b is func(): integer do
+b is func(a: integer, b:bool): integer do
     for iterator in 1..10 loop
         a()
     end
