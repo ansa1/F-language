@@ -1,4 +1,4 @@
-// Generated from /Users/satellite/Code/Java/comicon/projectf/src/main/java/antlr/F.g4 by ANTLR 4.7
+// Generated from C:/Users/ansat/Documents/F-language/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -347,6 +347,18 @@ public class FBaseListener implements FListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatement(FParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrint(FParser.PrintContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrint(FParser.PrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

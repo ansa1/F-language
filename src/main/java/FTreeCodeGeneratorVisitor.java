@@ -443,6 +443,11 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     }
 
     @Override
+    public Value visitPrint(FParser.PrintContext ctx) {
+        return null;
+    }
+
+    @Override
     public Value visitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
         //TODO func call
         for(int i = 0; i < stack.size(); i++){

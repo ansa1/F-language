@@ -1,4 +1,4 @@
-// Generated from /Users/satellite/Code/Java/comicon/projectf/src/main/java/antlr/F.g4 by ANTLR 4.7
+// Generated from C:/Users/ansat/Documents/F-language/src/main/java/antlr\F.g4 by ANTLR 4.7
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -287,6 +287,16 @@ public interface FListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(FParser.StatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link FParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrint(FParser.PrintContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link FParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrint(FParser.PrintContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link FParser#assignment_or_call}.
 	 * @param ctx the parse tree

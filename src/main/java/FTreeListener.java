@@ -331,6 +331,16 @@ public class FTreeListener implements FListener {
     }
 
     @Override
+    public void enterPrint(FParser.PrintContext ctx) {
+
+    }
+
+    @Override
+    public void exitPrint(FParser.PrintContext ctx) {
+
+    }
+
+    @Override
     public void enterAssignment_or_call(FParser.Assignment_or_callContext ctx) {
 
     }

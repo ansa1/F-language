@@ -173,6 +173,11 @@ public class FTreeVisitor<T> extends AbstractParseTreeVisitor<T> implements FVis
     }
 
     @Override
+    public T visitPrint(FParser.PrintContext ctx) {
+        return null;
+    }
+
+    @Override
     public T visitAssignment_or_call(FParser.Assignment_or_callContext ctx) {
         return visitChildren(ctx);
     }
