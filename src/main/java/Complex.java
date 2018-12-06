@@ -2,6 +2,11 @@ public class Complex {
     private Double real;
     private Double imaginary;
 
+    @Override
+    public String toString() {
+        return real + "i" + imaginary;
+    }
+
     public Complex(String complexString) {
         String[] complexStringParsed = complexString.split("i");
         this.real = Double.valueOf(complexStringParsed[0]);

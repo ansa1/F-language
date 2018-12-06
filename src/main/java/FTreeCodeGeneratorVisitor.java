@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.*;
 import java.math.BigInteger;
 import java.sql.SQLOutput;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 
@@ -380,14 +381,19 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
         return visitChildren(ctx);
     }
 
+    private void addLayer() {
+        stack.push(new HashMap<>());
+    }
+
     @Override
     public Value visitFunc_begin(FParser.Func_beginContext ctx) {
-        stack.push(new HashMap<>());
+        addLayer();
         return null;
     }
 
     @Override
     public Value visitFun_declaration(FParser.Fun_declarationContext ctx) {
+        stack.peek().put(ctx.identifier().getText(), new Value(0));
         return visitChildren(ctx);
     }
 
@@ -455,7 +461,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     @Override
     public Value visitPrint(FParser.PrintContext ctx) {
         for (int i = 0; i < ctx.expression().size(); i++) {
-            System.out.print(this.visit(ctx.expression(i)).value + " ");
+            System.out.print(this.visit(ctx.expression(i)).value.toString() + " ");
         }
         System.out.println();
         return null;
@@ -472,6 +478,12 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                 if((old.isBoolean() && !newV.isBoolean()) || (old.isComplex() && !newV.isComplex()) || (old.isDouble() && !newV.isDouble()) || (old.isInteger() && !newV.isInteger()) || (old.isRational() && !newV.isRational()))
                     throw new RuntimeException("types mismatch in " + ctx.getText());
                 tmp.replace(ctx.identifier().getText(), newV);
+            }
+        }
+        for(int i = 0; i < stackFun.size(); i++) {
+            HashMap<String, FParser.ExpressionContext> tmp = stackFun.get(i);
+            if(tmp.containsKey(ctx.identifier().getText())) {
+                return this.visit(tmp.get(ctx.identifier().getText()));
             }
         }
         return null;

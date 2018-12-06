@@ -92,7 +92,7 @@ parameters
 body
 :
     (body_start statements body_end)
-    | ( '=>' expression)
+    | ( '=>' statement)
 ;
 
 body_start

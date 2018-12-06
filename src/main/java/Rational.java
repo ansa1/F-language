@@ -2,6 +2,11 @@ public class Rational {
     private Integer numerator;
     private Integer denominator;
 
+    @Override
+    public String toString() {
+        return numerator + "i" + denominator;
+    }
+
     public Rational(Integer numerator, Integer denominator) {
         this.numerator = numerator;
         this.denominator = denominator;
