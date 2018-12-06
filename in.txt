@@ -1,4 +1,8 @@
 a is func() do
+    j is 0;
+    while j < 10 loop
+        j := j + 1
+    end;
     i: complex is 1i2;
     i := 3i13 * 7i17
 end;

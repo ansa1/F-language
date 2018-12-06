@@ -484,11 +484,29 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFor_loop(FParser.For_loopContext ctx) {
+        Value start;
+        Value end;
+        if (ctx.expression(1) != null)
+        {
+            start = this.visit(ctx.expression(0));
+            end = this.visit(ctx.expression(1));
+        } else {
+            start = new Value(0);
+            end = this.visit(ctx.expression(0));
+        }
+        for (int i = start.asInteger(); i < end.asInteger(); i++) {
+            visitChildren(ctx);
+        }
         return null;
     }
 
     @Override
     public Value visitWhile_loop(FParser.While_loopContext ctx) {
+        Boolean condition = this.visit(ctx.expression()).asBoolean();
+        while (condition) {
+            visitChildren(ctx);
+            condition = this.visit(ctx.expression()).asBoolean();
+        }
         return null;
     }
 
