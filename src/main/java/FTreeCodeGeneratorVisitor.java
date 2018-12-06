@@ -11,8 +11,17 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     public static final double SMALL_VALUE = 0.00000000001;
 
+    Stack<HashMap<String, String>> stack = new Stack<>();
+
+    private void initStack() {
+        if (stack.isEmpty()) {
+            stack.push(new HashMap<>());
+        }
+    }
+
     @Override
     public Value visitTranslationunit(FParser.TranslationunitContext ctx) {
+        initStack();
         return visitChildren(ctx);
     }
 
@@ -43,21 +52,101 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
             Value right = this.visit(ctx.right);
             switch (ctx.op.getText()) {
                 case "<":
-                    return new Value(left.asDouble() < right.asDouble());
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(left.asDouble() < right.asDouble());
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(left.asInteger() < right.asInteger());
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Double.valueOf(left.asInteger()) < right.asDouble());
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(left.asDouble() < Double.valueOf(right.asInteger()));
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) < (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) < right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() < (right.asInteger() * left.asRational().getDenominator()));
+                    }
                 case "<=":
-                    return new Value(left.asDouble() <= right.asDouble());
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(left.asDouble() <= right.asDouble());
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(left.asInteger() <= right.asInteger());
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Double.valueOf(left.asInteger()) <= right.asDouble());
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(left.asDouble() <= Double.valueOf(right.asInteger()));
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) <= (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) <= right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() <= (right.asInteger() * left.asRational().getDenominator()));
+                    };
                 case ">":
-                    return new Value(left.asDouble() > right.asDouble());
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(left.asDouble() > right.asDouble());
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(left.asInteger() > right.asInteger());
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Double.valueOf(left.asInteger()) > right.asDouble());
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(left.asDouble() > Double.valueOf(right.asInteger()));
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) > (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) > right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() > (right.asInteger() * left.asRational().getDenominator()));
+                    }
                 case ">=":
-                    return new Value(left.asDouble() >= right.asDouble());
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(left.asDouble() >= right.asDouble());
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(left.asInteger() >= right.asInteger());
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Double.valueOf(left.asInteger()) >= right.asDouble());
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(left.asDouble() >= Double.valueOf(right.asInteger()));
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) >= (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) >= right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() >= (right.asInteger() * left.asRational().getDenominator()));
+                    }
                 case "=":
-                    return left.isDouble() && right.isDouble() ?
-                            new Value(Math.abs(left.asDouble() - right.asDouble()) < SMALL_VALUE) :
-                            new Value(left.equals(right));
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(Math.abs(left.asDouble() - right.asDouble()) < SMALL_VALUE);
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(left.asInteger().equals(right.asInteger()));
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Math.abs(Double.valueOf(left.asInteger()) - right.asDouble()) < SMALL_VALUE);
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(Math.abs(left.asDouble() - Double.valueOf(right.asInteger())) < SMALL_VALUE);
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) == (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) == right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() == (right.asInteger() * left.asRational().getDenominator()));
+                    }
                 case "/=":
-                    return left.isDouble() && right.isDouble() ?
-                            new Value(Math.abs(left.asDouble() - right.asDouble()) >= SMALL_VALUE) :
-                            new Value(!left.equals(right));
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(Math.abs(left.asDouble() - right.asDouble()) >= SMALL_VALUE);
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(!left.asInteger().equals(right.asInteger()));
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Math.abs(Double.valueOf(left.asInteger()) - right.asDouble()) >= SMALL_VALUE);
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(Math.abs(left.asDouble() - Double.valueOf(right.asInteger())) >= SMALL_VALUE);
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) != (right.asRational().getNumerator() * left.asRational().getDenominator()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value((left.asInteger() * right.asRational().getDenominator()) != right.asRational().getNumerator());
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(left.asRational().getNumerator() != (right.asInteger() * left.asRational().getDenominator()));
+                    }
                 default:
                     throw new RuntimeException("unknown operator: " + ctx.op.getText());
             }
@@ -164,7 +253,27 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                         return new Value(Utils.complex_mult(left.asComplex(), right.asDouble()));
                     }
                 case "/":
-                    return new Value(left.asDouble() / right.asDouble());
+                    if (left.isDouble() && right.isDouble()) {
+                        return new Value(left.asDouble() / right.asDouble());
+                    } else if (left.isInteger() && right.isInteger()) {
+                        return new Value(Double.valueOf(left.asInteger()) / Double.valueOf(right.asInteger()));
+                    } else if (left.isInteger() && right.isDouble()) {
+                        return new Value(Double.valueOf(left.asInteger()) / right.asDouble());
+                    } else if (left.isDouble() && right.isInteger()) {
+                        return new Value(left.asDouble() / Double.valueOf(right.asInteger()));
+                    } else if (left.isRational() && right.isRational()) {
+                        return new Value(Utils.rational_div(left.asRational(), right.asRational()));
+                    } else if (left.isInteger() && right.isRational()) {
+                        return new Value(Utils.rational_div(left.asInteger(), right.asRational()));
+                    } else if (left.isRational() && right.isInteger()) {
+                        return new Value(Utils.rational_div(left.asRational(), right.asInteger()));
+                    } else if (left.isComplex() && right.isComplex()) {
+                        return new Value(Utils.complex_div(left.asComplex(), right.asComplex()));
+                    } else if (left.isComplex() && right.isInteger()) {
+                        return new Value(Utils.complex_div(left.asComplex(), right.asInteger()));
+                    } else if (left.isComplex() && right.isDouble()) {
+                        return new Value(Utils.complex_div(left.asComplex(), right.asDouble()));
+                    }
                 default:
                     throw new RuntimeException("unknown operator: " + ctx.op.getText());
             }
@@ -178,10 +287,31 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
             Value value = this.visit(ctx.exp);
             switch (ctx.sign.getText()) {
                 case "+":
-                    return new Value(value.asDouble());
+                    if (value.isDouble()){
+                        return new Value(value.asDouble());
+                    }
+                    if (value.isInteger()){
+                        return new Value(value.asInteger());
+                    }
+                    if (value.isRational()){
+                        return new Value(Utils.uplus(value.asRational()));
+                    }
+                    if (value.isComplex()){
+                        return new Value(Utils.uplus(value.asComplex()));
+                    }
                 case "-":
-                    return new Value(-value.asDouble());
-                default:
+                    if (value.isDouble()){
+                        return new Value(-value.asDouble());
+                    }
+                    if (value.isInteger()){
+                        return new Value(-value.asInteger());
+                    }
+                    if (value.isRational()){
+                        return new Value(Utils.uminus(value.asRational()));
+                    }
+                    if (value.isComplex()){
+                        return new Value(Utils.uminus(value.asComplex()));
+                    }       default:
                     throw new RuntimeException("unknown operator: " + ctx.sign.getText());
             }
         }

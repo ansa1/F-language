@@ -1,4 +1,5 @@
 a is func() do
-    i: complex is 1i2;
-    i := 3i13 * 7i17
+    x is 2;
+    y is 3;
+    x := 4 + y
 end
