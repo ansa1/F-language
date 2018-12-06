@@ -15,7 +15,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     public static final double SMALL_VALUE = 0.00000000001;
 
     Stack<HashMap<String, Value>> stack = new Stack<>();
-    Stack<HashMap<String, ArrayList<Value>>> params = new Stack<>();
+    Stack<ArrayList<Value>> params = new Stack<>();
     Stack<HashMap<String, FParser.ExpressionContext>> stackFun = new Stack<>();
 
     private void initStack() {
@@ -32,7 +32,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     private void initStackParams() {
         if (params.isEmpty()) {
-            params.push(new HashMap<>());
+            params.push(new ArrayList<>());
         }
     }
 
@@ -97,20 +97,36 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
                     }
                 case "<=":
                     if (left.isDouble() && right.isDouble()) {
+                        System.out.println(1);
                         return new Value(left.asDouble() <= right.asDouble());
                     } else if (left.isInteger() && right.isInteger()) {
-                        return new Value(left.asInteger() <= right.asInteger());
+                        System.out.println(2);
+                        System.out.println("start"+left+"end");
+                        System.out.println(right.asInteger());
+                        System.out.println(left.asInteger() <= right.asInteger());
+                        System.out.println("asfagawfwa");
+                        Value value = new Value(left.asInteger() <= right.asInteger());
+                        System.out.println("success");
+                        return value;
                     } else if (left.isInteger() && right.isDouble()) {
+                        System.out.println(3);
                         return new Value(Double.valueOf(left.asInteger()) <= right.asDouble());
                     } else if (left.isDouble() && right.isInteger()) {
+                        System.out.println(4);
                         return new Value(left.asDouble() <= Double.valueOf(right.asInteger()));
                     } else if (left.isRational() && right.isRational()) {
+                        System.out.println(5);
                         return new Value((left.asRational().getNumerator() * right.asRational().getDenominator()) <= (right.asRational().getNumerator() * left.asRational().getDenominator()));
                     } else if (left.isInteger() && right.isRational()) {
+                        System.out.println(6);
                         return new Value((left.asInteger() * right.asRational().getDenominator()) <= right.asRational().getNumerator());
                     } else if (left.isRational() && right.isInteger()) {
+                        System.out.println(7);
+
                         return new Value(left.asRational().getNumerator() <= (right.asInteger() * left.asRational().getDenominator()));
                     } else {
+                        System.out.println(8);
+
                         throw new RuntimeException("bad types of: " + ctx.left.getText() + " and " + ctx.right.getText());
                     }
                 case ">":
@@ -386,15 +402,20 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunction(FParser.FunctionContext ctx) {
+//        System.out.println(2);
         Value result = visitChildren(ctx);
         return result;
     }
 
     @Override
     public Value visitParameters(FParser.ParametersContext ctx) {
+//        System.out.println("-----------------");
         for (int i = 0; i < ctx.fun_declaration().size(); i++) {
             String fun_param = ctx.fun_declaration(i).identifier().getText();
-            stack.peek().put(fun_param, new Value(0));
+            if (!params.isEmpty()){
+//                System.out.println("VARIABLES " +  params.peek().get(i));
+                stack.peek().put(fun_param, params.peek().get(i));
+            }
         }
         return null;
     }
@@ -405,7 +426,17 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunc_begin(FParser.Func_beginContext ctx) {
+//        System.out.println(3);
         addLayer();
+        return null;
+    }
+
+    public Value visitFunc_begin(FParser.Func_beginContext ctx, ArrayList<String> paramsKeys, ArrayList<Value> paramValues) {
+//        System.out.println(3);
+        addLayer();
+        for (int i = 0; i < paramsKeys.size(); i++) {
+            stack.peek().put(paramsKeys.get(i), paramValues.get(i));
+        }
         return null;
     }
 
@@ -416,6 +447,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitBody(FParser.BodyContext ctx) {
+//        System.out.println(4);
         Value result = this.visit(ctx.statements());
         return result;
     }
@@ -428,6 +460,7 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
     @Override
     public Value visitBody_end(FParser.Body_endContext ctx) {
         stack.pop();
+        params.pop();
         return null;
     }
 
@@ -481,7 +514,9 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitReturn_statement(FParser.Return_statementContext ctx) {
+//        System.out.println(5);
         Value val = new Value(visit(ctx.expression()));
+//        System.out.println("return " + val);
         return val;
     }
 
@@ -516,15 +551,22 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitFunction_call(FParser.Function_callContext ctx) {
+//        System.out.println("call func " + ctx.getText());
         for (int i = 0; i < stackFun.size(); i++) {
             HashMap<String, FParser.ExpressionContext> tmp = stackFun.get(i);
             if (tmp.containsKey(ctx.identifier().getText())) {
-                ArrayList<Value> params_local = new ArrayList<>();
+
+                ArrayList<Value> params_keys = new ArrayList<>();
+                ArrayList<Value> params_values = new ArrayList<>();
+
                 for (int j = 0; j < ctx.expression().size(); j++) {
-                    params_local.add(new Value(ctx.expression(i).getText()));
+                    params_values.add(new Value(ctx.expression(i).getText()));
+                    params_keys.add(new Value("k"));
                 }
+
                 initStackParams();
-                params.peek().put(ctx.identifier().getText(), params_local);
+                params.push(params_values);
+
                 Value val = visit(tmp.get(ctx.identifier().getText()));
                 return val;
             }
@@ -629,9 +671,6 @@ public class FTreeCodeGeneratorVisitor extends AbstractParseTreeVisitor<Value> i
 
     @Override
     public Value visitIdentifier(FParser.IdentifierContext ctx) {
-        if (ctx.getParent().getClass().getName().matches("(^.*Declaration.*$)|(^.*declaration.*$)")) {
-//            System.out.println("hey " + ctx.getParent().getToken().getText());
-        }
         for (int i = 0; i < stack.size(); i++) {
             HashMap<String, Value> tmp = stack.get(i);
             if (tmp.containsKey(ctx.getText())) {

@@ -1,15 +1,11 @@
-a is func(k: integer) do
-    print k;
-    if 1 < 2 then
-        return 3
+fib is func(n: integer) do
+    if n <= 3 then
+        print 2
     else
-        return 4
+        print n
     end
 end;
 
 main is func() do
-    a(200);
-    d is 0;
-    d := a();
-    print d
+    fib(5)
 end

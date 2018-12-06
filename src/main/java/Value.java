@@ -17,7 +17,7 @@ public class Value {
     }
 
     public Integer asInteger() {
-        return (Integer) value;
+        return (Integer) Integer.valueOf(value.toString());
     }
 
     public Rational asRational() {
